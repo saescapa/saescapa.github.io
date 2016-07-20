@@ -1,6 +1,6 @@
 @import 'reset.css';
 
-$number_hold: 120px;
+$number_hold: 9vw;
 @keyframes roulette_change {
   0% {
     top: 0px;
@@ -135,42 +135,47 @@ body {
   }
 }
 
-.box {
+.content {
   width: 80%;
-  margin-left: 10%;
-  margin-right: 10%;
+  height: 50vh;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  text-align: center;
 }
-
 .box {
   &.header {
     font-family: 'Montserrat', sans-serif;
-    font-size: 8vw;
-    text-align: center;
-    transition: color 1s;
+    font-size: 9vw;
+    transition: color 0.5s;
+    color: inherit;
     .samu:hover {
       color: #FF855A;
     }
   }
   &.roulette {
-    border-left: 8px solid #61AFEF;
-    border-right: 8px solid #61AFEF;
-    height: 120px;
+    border-left: 0.5vw solid #61AFEF;
+    border-right: 0.5vw solid #61AFEF;
+    height: 9vw;
     text-transform: capitalize;
     overflow: hidden;
-    width: initial;
-    display: table;
+    width: 90%;
     animation: color_change 10s infinite;
     margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
     .words {
       position: relative;
-      height: 120px;
+      height: 9vw;
       top: 0;
-      width: 720px;
       animation: roulette_change 10s infinite;
       .word {
-        height: 120px;
-        font-size: 10vh;
-        line-height: 120px;
+        height: 9vw;
+        font-size: 9vw;
+        line-height: 9vw;
         display: table;
         text-align: center;
         width: 100%;
@@ -187,11 +192,10 @@ body {
     }
   }
   &.medias {
-    position: absolute;
-    bottom: 0;
+    width: 100%;
     text-align: center;
     a {
-      font-size: 3em;
+      font-size: 5vw;
       padding: 10px;
     }
   }
