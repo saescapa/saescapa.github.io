@@ -1,30 +1,6 @@
 @import 'reset.css';
 
-@keyframes open-envelope {
-  0% {
-    top: 50vh;
-  }
-  10% {
-    top: 48vh;
-  }
-  65% {
-    opacity: 1;
-  }
-  100% {
-    top: 140vh;
-    opacity: 0;
-  }
-}
-
 $body-background-color: #f5f5f5;
-$box-shadow-color: #939393;
-$envelope-background-color: #e1d3bf;
-$envelope-width: 60vw;
-$envelope-seal-border-color: #f4ede1;
-$envelope-seal-background-color: #efe4d3;
-
-$letter-background-color: #fcfbf9;
-$letter-shadow-color: #c4c4c4;
 
 * {
   box-sizing: border-box;
@@ -37,8 +13,8 @@ html, body {
 }
 
 body {
-  position: relative;
   background-color: $body-background-color;
+  font-family: monospace;
   a {
     color: inherit;
     text-decoration: none;
@@ -49,116 +25,72 @@ body {
   }
 }
 
-%animation-shared {
-  animation: open-envelope 1.5s;
-  animation-delay: 0.5s;
-  animation-fill-mode: forwards;
-  animation-timing-function: linear;
-}
 
-.envelope-container {
-  position: absolute;
-  top: 50vh;
-  width: 100%;
-  z-index: 4;
-  @extend %animation-shared;
-  .envelope {
-    margin: 0 auto;
-    width: $envelope-width;
-    max-width: 800px;
-    min-width: 600px;
-    height: 600px;
-    background-color: $envelope-background-color;
-    box-shadow: 0px 0px 40px $box-shadow-color;
-  }
-}
-
-.envelope-seal-container {
-  position: absolute;
-  top: 50vh;
-  width: 100%;
-  height: 1px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: -5;
-  @extend %animation-shared;
-  .envelope-seal {
-    width: 42.4264068712vw; // root($envelope-width^2/2)
-    max-width: 565.685424949px;
-    min-width: 424.264068712px; // root(600^2/2)
-    height: 42.4264068712vw;
-    max-height: 565.685424949px;
-    min-height: 424.264068712px;
-    margin: 0 auto;
-    border: 50px solid $envelope-seal-border-color;
-    border-top-left-radius: 30px;
-    box-shadow: 0px 0px 40px $box-shadow-color;
-    background-color: $envelope-seal-background-color;
-    transform: rotate(45deg);
-  }
-}
-
-.letter-container {
-  position: absolute;
-  top: 0;
-  left: 0;
+.main {
   width: 100%;
   height: 100%;
-  font-family: 'Catamaran', sans-serif;
-  z-index: 3;
-  .letter-box {
+  padding: 50px;
+  display: flex;
+  flex-wrap: nowrap;
+  .basic {
+    flex: 50%;
+    width: 50%;
+    .name {
+      font-size: 3em;
+    }
+    .projects {
+      font-size: 1.5em;
+      .project {
+        position: relative;
+        background-color: white;
+        padding: 4px;
+        padding-left: 20px;
+        margin-bottom: 8px;
+        height: 31px;
+        &:before {
+          position: absolute;
+          top: 11px;
+          left: 5px;
+          content: "";
+          width: 10px;
+          height: 10px;
+          background-color: red;
+          border-radius: 50%;
+        }
+        &.active:before {
+          background-color: green;
+        }
+        &:after {
+          position: absolute;
+          top: 0px;
+          right: 0px;
+          width: 50px;
+          content: "";
+          border-top: 15.5px solid $body-background-color;
+          border-left: 15px solid white;
+          border-bottom: 15.5px solid $body-background-color;
+        }
+      }
+    }
+  }
+  .details {
+    flex: 50%;
+    width: 50%;
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .content {
-      position: relative;
-      width: 50vw;
-      min-width: 500px;
-      max-width: 750px;
-      min-height: 500px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 20px;
-      box-shadow: 0px 0px 60px $letter-shadow-color;
-      background-color: $letter-background-color;
-      .picture {
-        flex: 100%;
-        width: 100%;
-        text-align: center;
-          img {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-          }
+    position: relative;
+    .panel {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 1px solid black;
+      display: none;
+      &.active {
+        display: block;
       }
-      .name {
-        width: 100%;
-        text-align: center;
-        text-transform: uppercase;
-        color: #6c936c;
+      .title {
         font-size: 3em;
-        font-style: italic;
-        font-weight: 900;
-      }
-      .current {
-        text-align: center;
-        .work {
-          color: #666563;
-          font-size: 1.3em;
-          font-weight: 500;
-        }
-      }
-      .links {
-        width: 100%;
-        text-align: center;
-        a {
-          display: inline-block;
-          margin: 10px;
-          font-size: 2.3em;
-        }
       }
     }
   }
