@@ -12,7 +12,7 @@ body {
   font-family: monospace; }
   body a {
     color: inherit;
-    text-decoration: none; }
+    text-decoration: underline; }
     body a:hover, body a:focus, body a:visited {
       color: inherit;
       text-decoration: none; }
@@ -25,7 +25,8 @@ body {
   flex-wrap: nowrap; }
   .main .basic {
     flex: 50%;
-    width: 50%; }
+    width: 50%;
+    display: none; }
     .main .basic .name {
       font-size: 3em; }
     .main .basic .projects {
@@ -61,18 +62,38 @@ body {
     flex: 50%;
     width: 50%;
     height: 100%;
-    position: relative; }
+    position: relative;
+    font-size: 1.2em; }
     .main .details .panel {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      border: 1px solid black;
       display: none; }
       .main .details .panel.active {
         display: block; }
       .main .details .panel .title {
-        font-size: 3em; }
+        font-size: 2em;
+        text-align: center; }
+      .main .details .panel .content {
+        margin-top: 30px;
+        margin-bottom: 20px; }
+        .main .details .panel .content .list {
+          margin-top: 20px; }
+          .main .details .panel .content .list .list-title {
+            font-size: 1.1em;
+            margin: 5px; }
+          .main .details .panel .content .list .list-item {
+            margin: 5px; }
+      .main .details .panel .links {
+        font-size: 35px; }
+
+#primary {
+  text-align: center; }
+  #primary .profile {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%; }
 
 /*# sourceMappingURL=style.css.map */
