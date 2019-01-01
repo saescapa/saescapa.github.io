@@ -45,17 +45,23 @@ body {
     }
     .projects {
       font-size: 1.5em;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      padding-top: 50px;
+      padding-bottom: 50px;
       .project {
         position: relative;
         background-color: white;
-        padding: 4px;
-        padding-left: 20px;
+        padding: 8px;
+        padding-left: 25px;
         margin-bottom: 8px;
-        height: 31px;
+        height: 39px;
         &:before {
           position: absolute;
-          top: 11px;
-          left: 5px;
+          top: 16px;
+          left: 8px;
           content: "";
           width: 10px;
           height: 10px;
@@ -71,9 +77,9 @@ body {
           right: 0px;
           width: 50px;
           content: "";
-          border-top: 15.5px solid $body-background-color;
+          border-top: 19.5px solid $body-background-color;
           border-left: 15px solid white;
-          border-bottom: 15.5px solid $body-background-color;
+          border-bottom: 19.5px solid $body-background-color;
         }
       }
     }
