@@ -202,6 +202,13 @@ body {
       padding-bottom: 60px;
       .name {
         font-size: 4em;
+        .samu {
+          color: inherit;
+          transition: color 0.5s;
+        }
+        .samu:hover {
+          color: #FF855A;
+        }
       }
       .description {
         font-size: 2em;

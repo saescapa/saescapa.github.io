@@ -144,6 +144,11 @@ body {
       padding-bottom: 60px; }
       .landing .profile .profile-content .name {
         font-size: 4em; }
+        .landing .profile .profile-content .name .samu {
+          color: inherit;
+          transition: color 0.5s; }
+        .landing .profile .profile-content .name .samu:hover {
+          color: #FF855A; }
       .landing .profile .profile-content .description {
         font-size: 2em; }
       .landing .profile .profile-content .links {
