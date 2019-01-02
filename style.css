@@ -4,6 +4,11 @@
     right: 100%; }
   100% {
     right: 0; } }
+@keyframes opacity {
+  0% {
+    opacity: 1; }
+  100% {
+    opacity: 0; } }
 * {
   box-sizing: border-box; }
 
@@ -120,6 +125,10 @@ body {
       position: absolute;
       bottom: 0px;
       height: 90vh; }
+      .landing .profile-image img.sketch {
+        animation: opacity 1s;
+        animation-delay: 1.5s;
+        animation-fill-mode: forwards; }
   .landing .profile {
     width: 60%;
     flex: 60%;
