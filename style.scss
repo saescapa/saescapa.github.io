@@ -26,6 +26,15 @@ $medium-width: 1000px;
   }
 }
 
+@keyframes opacity {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
@@ -171,6 +180,11 @@ body {
       position: absolute;
       bottom: 0px;
       height: 90vh;
+      &.sketch {
+        animation: opacity 1s;
+        animation-delay: 1.5s;
+        animation-fill-mode: forwards;
+      }
     }
   }
   .profile {
