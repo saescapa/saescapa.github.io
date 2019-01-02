@@ -1,4 +1,9 @@
 @import url(reset.css);
+@keyframes move-right {
+  0% {
+    right: 100%; }
+  100% {
+    right: 0; } }
 * {
   box-sizing: border-box; }
 
@@ -6,10 +11,14 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden; }
+  @media (max-width: 1000px) {
+    html, body {
+      height: auto;
+      overflow: inherit; } }
 
 body {
-  background-color: #f5f5f5;
-  font-family: monospace; }
+  background-color: #ECF0F2;
+  font-family: 'Hind', sans-serif; }
   body a {
     color: inherit;
     text-decoration: underline; }
@@ -17,93 +26,129 @@ body {
       color: inherit;
       text-decoration: none; }
 
-.main {
+.content {
   width: 100%;
   height: 100%;
-  padding: 50px;
   display: flex;
+  flex-direction: row;
   flex-wrap: nowrap; }
-  @media (max-width: 700px) {
-    .main {
-      padding: 5px;
-      font-size: 0.9em; } }
-  .main .basic {
-    flex: 50%;
-    width: 50%;
-    display: none; }
-    .main .basic .name {
-      font-size: 3em; }
-    .main .basic .projects {
-      font-size: 1.5em;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+  .content .main {
+    width: 75%;
+    flex: 75%;
+    margin: 20px;
+    margin-right: 0px;
+    overflow: hidden; }
+  .content .side {
+    width: 25%;
+    flex: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 10px; }
+    .content .side .box {
       height: 100%;
-      padding-top: 50px;
-      padding-bottom: 50px; }
-      .main .basic .projects .project {
-        position: relative;
-        background-color: white;
-        padding: 8px;
-        padding-left: 25px;
-        margin-bottom: 8px;
-        height: 39px; }
-        .main .basic .projects .project:before {
-          position: absolute;
-          top: 16px;
-          left: 8px;
-          content: "";
-          width: 10px;
-          height: 10px;
-          background-color: red;
-          border-radius: 50%; }
-        .main .basic .projects .project.active:before {
-          background-color: green; }
-        .main .basic .projects .project:after {
-          position: absolute;
-          top: 0px;
-          right: 0px;
-          width: 50px;
-          content: "";
-          border-top: 19.5px solid #f5f5f5;
-          border-left: 15px solid white;
-          border-bottom: 19.5px solid #f5f5f5; }
-  .main .details {
-    flex: 50%;
-    width: 50%;
-    height: 100%;
-    position: relative;
-    font-size: 1.2em; }
-    .main .details .panel {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: none; }
-      .main .details .panel.active {
-        display: block; }
-      .main .details .panel .title {
-        font-size: 2em;
-        text-align: center; }
-      .main .details .panel .content {
-        margin-top: 30px;
-        margin-bottom: 20px; }
-        .main .details .panel .content .list {
-          margin-top: 20px; }
-          .main .details .panel .content .list .list-title {
-            font-size: 1.1em;
-            margin: 5px; }
-          .main .details .panel .content .list .list-item {
-            margin: 5px; }
-      .main .details .panel .links {
-        font-size: 35px; }
+      margin: 10px; }
+  @media (max-width: 1000px) {
+    .content {
+      display: block; }
+      .content .main {
+        width: 100%;
+        margin: 0px; }
+        .content .main .landing {
+          height: auto; }
+      .content .side {
+        width: 100%;
+        margin: 0px; }
+        .content .side .box {
+          height: auto;
+          padding: 10px; } }
 
-#primary {
-  text-align: center; }
-  #primary .profile {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%; }
+.side .box {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative; }
+  .side .box .box-content .title {
+    font-size: 1.5em; }
+  .side .box .box-content .description {
+    font-size: 1.2em; }
+  .side .box .box-content .date {
+    font-size: 1.2em; }
+  .side .box:hover .hover {
+    opacity: 1; }
+  .side .box .hover {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    transition: all 0.25s;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em; }
+.side .tensoriot {
+  background-color: #00C8F2;
+  color: #414141; }
+.side .hackplus {
+  background-color: #00355F;
+  color: #ffffff; }
+.side .codeday {
+  background-color: #FF515E;
+  color: #ffffff; }
+.side .usf {
+  background-color: #004D38;
+  color: #FFBC00; }
+
+.landing {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  background-color: #1D2532; }
+  .landing .profile-image {
+    width: 40%;
+    flex: 40%;
+    position: relative;
+    z-index: 2; }
+    .landing .profile-image img {
+      position: absolute;
+      bottom: 0px;
+      height: 90vh; }
+  .landing .profile {
+    width: 60%;
+    flex: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; }
+    .landing .profile .profile-content {
+      position: relative;
+      animation: move-right 2s;
+      color: white;
+      text-align: center;
+      padding-bottom: 60px; }
+      .landing .profile .profile-content .name {
+        font-size: 4em; }
+      .landing .profile .profile-content .description {
+        font-size: 2em; }
+      .landing .profile .profile-content .links {
+        font-size: 3em; }
+        .landing .profile .profile-content .links a {
+          margin: 10px; }
+  @media (max-width: 1000px) {
+    .landing .profile-image {
+      display: none; }
+    .landing .profile {
+      width: 100%;
+      flex: 100%; }
+      .landing .profile .profile-content {
+        font-size: 2.5vw;
+        padding-bottom: 0px; } }
 
 /*# sourceMappingURL=style.css.map */

@@ -1,6 +1,30 @@
 @import 'reset.css';
 
-$body-background-color: #f5f5f5;
+$body-background-color: #ECF0F2;
+$landing-background-color: #1D2532;
+
+$tensoriot-color: #414141;
+$tensoriot-background-color: #00C8F2;
+
+$hackplus-color: #ffffff;
+$hackplus-background-color: #00355F;
+
+$codeday-color: #ffffff;
+$codeday-background-color: #FF515E;
+
+$usf-color: #FFBC00;
+$usf-background-color: #004D38;
+
+$medium-width: 1000px;
+
+@keyframes move-right {
+  0% {
+    right: 100%;
+  }
+  100% {
+    right: 0;
+  }
+}
 
 * {
   box-sizing: border-box;
@@ -10,11 +34,15 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  @media(max-width: $medium-width) {
+    height: auto;
+    overflow: inherit;
+  }
 }
 
 body {
   background-color: $body-background-color;
-  font-family: monospace;
+  font-family: 'Hind', sans-serif;
   a {
     color: inherit;
     text-decoration: underline;
@@ -25,112 +53,164 @@ body {
   }
 }
 
-
-.main {
+.content {
   width: 100%;
   height: 100%;
-  padding: 50px;
   display: flex;
+  flex-direction: row;
   flex-wrap: nowrap;
-  @media(max-width: 700px) {
-    padding: 5px;
-    font-size: 0.9em;
+  .main {
+    width: 75%;
+    flex: 75%;
+    margin: 20px;
+    margin-right: 0px;
+    overflow: hidden;
   }
-  .basic {
-    flex: 50%;
-    width: 50%;
-    display: none;
-    .name {
-      font-size: 3em;
-    }
-    .projects {
-      font-size: 1.5em;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+  .side {
+    width: 25%;
+    flex: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 10px;
+    .box {
       height: 100%;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      .project {
-        position: relative;
-        background-color: white;
-        padding: 8px;
-        padding-left: 25px;
-        margin-bottom: 8px;
-        height: 39px;
-        &:before {
-          position: absolute;
-          top: 16px;
-          left: 8px;
-          content: "";
-          width: 10px;
-          height: 10px;
-          background-color: red;
-          border-radius: 50%;
-        }
-        &.active:before {
-          background-color: green;
-        }
-        &:after {
-          position: absolute;
-          top: 0px;
-          right: 0px;
-          width: 50px;
-          content: "";
-          border-top: 19.5px solid $body-background-color;
-          border-left: 15px solid white;
-          border-bottom: 19.5px solid $body-background-color;
-        }
-      }
+      margin: 10px;
     }
   }
-  .details {
-    flex: 50%;
-    width: 50%;
-    height: 100%;
-    position: relative;
-    font-size: 1.2em;
-    .panel {
-      position: absolute;
-      top: 0;
-      left: 0;
+  @media(max-width: $medium-width) {
+    display: block;
+    .main {
       width: 100%;
-      height: 100%;
-      // border: 1px solid black;
-      display: none;
-      &.active {
-        display: block;
+      margin: 0px;
+      .landing {
+        height: auto;
       }
-      .title {
-        font-size: 2em;
-        text-align: center;
-      }
-      .content {
-        margin-top: 30px;
-        margin-bottom: 20px;
-        .list {
-          margin-top: 20px;
-          .list-title {
-            font-size: 1.1em;
-            margin: 5px;
-          }
-          .list-item {
-            margin: 5px;
-          }
-        }
-      }
-      .links {
-        font-size: 35px;
+    }
+    .side {
+      width: 100%;
+      margin: 0px;
+      .box {
+        height: auto;
+        padding: 10px;
       }
     }
   }
 }
 
-#primary {
-  text-align: center;
+.side {
+  .box {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    .box-content {
+      .title {
+        font-size: 1.5em;
+      }
+      .description {
+        font-size: 1.2em;
+      }
+      .date {
+        font-size: 1.2em;
+      }
+    }
+    &:hover {
+      .hover {
+        opacity: 1;
+      }
+    }
+    .hover {
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      transition: all 0.25s;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5em;
+    }
+  }
+  .tensoriot {
+    background-color: $tensoriot-background-color;
+    color: $tensoriot-color;
+  }
+  .hackplus {
+    background-color: $hackplus-background-color;
+    color: $hackplus-color;
+  }
+  .codeday {
+    background-color: $codeday-background-color;
+    color: $codeday-color;
+  }
+  .usf {
+    background-color: $usf-background-color;
+    color: $usf-color;
+  }
+}
+
+.landing {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  background-color: $landing-background-color;
+  .profile-image {
+    width: 40%;
+    flex: 40%;
+    position: relative;
+    z-index: 2;
+    img {
+      position: absolute;
+      bottom: 0px;
+      height: 90vh;
+    }
+  }
   .profile {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
+    width: 60%;
+    flex: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    .profile-content {
+      position: relative;
+      animation: move-right 2s;
+      color: white;
+      text-align: center;
+      padding-bottom: 60px;
+      .name {
+        font-size: 4em;
+      }
+      .description {
+        font-size: 2em;
+      }
+      .links {
+        font-size: 3em;
+        a {
+          margin: 10px;
+        }
+      }
+    }
+  }
+  @media(max-width: $medium-width) {
+    .profile-image {
+      display: none;
+    }
+    .profile {
+      width: 100%;
+      flex: 100%;
+      .profile-content {
+        font-size: 2.5vw;
+        padding-bottom: 0px;
+      }
+    }
   }
 }
