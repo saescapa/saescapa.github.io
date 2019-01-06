@@ -219,6 +219,16 @@ body {
         a {
           margin: 10px;
         }
+        .resume {
+          position: relative;
+          i.fa-user {
+            position: absolute;
+            left: 0;
+            font-size: 0.4em;
+            right: 0;
+            top: 40%;
+          }
+        }
       }
     }
   }
