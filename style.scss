@@ -7,7 +7,7 @@ $tensoriot-color: #414141;
 $tensoriot-background-color: #00C8F2;
 
 $hackplus-color: #ffffff;
-$hackplus-background-color: #22A7F0;
+$hackplus-background-color: #9137FF;
 
 $codeday-color: #ffffff;
 $codeday-background-color: #FF515E;
@@ -201,6 +201,7 @@ body {
       color: white;
       text-align: center;
       animation: move-right 2s;
+      max-width: 480px;
       .name {
         font-size: 4em;
         .samu {
@@ -213,11 +214,32 @@ body {
       }
       .description {
         font-size: 2em;
+        padding-bottom: 20px;
+        transition: color 0.25s;
+        .learner {
+          font-family: 'Caveat', cursive;
+          font-size: 1.2em;
+        }
+        .explorer {
+          font-family: 'Pompiere', cursive;
+          font-size: 1.2em;
+        }
+        &:hover {
+          color: #2B75C9;
+        }
+        span {
+          color: #ffffff;
+        }
       }
       .links {
         font-size: 3em;
         a {
           margin: 10px;
+          transition: all 0.25s;
+          &:hover {
+            color: #A3A7AC;
+            font-size: 1.1em;
+          }
         }
         .resume {
           position: relative;

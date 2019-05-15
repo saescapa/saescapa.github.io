@@ -101,7 +101,7 @@ body {
   background-color: #00C8F2;
   color: #414141; }
 .side .hackplus {
-  background-color: #22A7F0;
+  background-color: #9137FF;
   color: #ffffff; }
 .side .codeday {
   background-color: #FF515E;
@@ -141,7 +141,8 @@ body {
       padding-bottom: 60px;
       color: white;
       text-align: center;
-      animation: move-right 2s; }
+      animation: move-right 2s;
+      max-width: 480px; }
       .landing .profile .profile-content .name {
         font-size: 4em; }
         .landing .profile .profile-content .name .samu {
@@ -150,19 +151,35 @@ body {
         .landing .profile .profile-content .name .samu:hover {
           color: #FF855A; }
       .landing .profile .profile-content .description {
-        font-size: 2em; }
+        font-size: 2em;
+        padding-bottom: 20px;
+        transition: color 0.25s; }
+        .landing .profile .profile-content .description .learner {
+          font-family: 'Caveat', cursive;
+          font-size: 1.2em; }
+        .landing .profile .profile-content .description .explorer {
+          font-family: 'Pompiere', cursive;
+          font-size: 1.2em; }
+        .landing .profile .profile-content .description:hover {
+          color: #2B75C9; }
+        .landing .profile .profile-content .description span {
+          color: #ffffff; }
       .landing .profile .profile-content .links {
         font-size: 3em; }
         .landing .profile .profile-content .links a {
-          margin: 10px; }
+          margin: 10px;
+          transition: all 0.25s; }
+          .landing .profile .profile-content .links a:hover {
+            color: #A3A7AC;
+            font-size: 1.1em; }
         .landing .profile .profile-content .links .resume {
           position: relative; }
           .landing .profile .profile-content .links .resume i.fa-user {
             position: absolute;
-            left: 0;
-            font-size: 0.4em;
+            top: 40%;
             right: 0;
-            top: 40%; }
+            left: 0;
+            font-size: 0.4em; }
   @media (max-width: 1000px) {
     .landing .profile-image {
       display: none; }
