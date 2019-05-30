@@ -26,10 +26,10 @@ body {
   font-family: 'Hind', sans-serif; }
   body a {
     color: inherit;
-    text-decoration: underline; }
+    text-decoration: none; }
     body a:hover, body a:focus, body a:visited {
       color: inherit;
-      text-decoration: none; }
+      text-decoration: underline; }
 
 .content {
   width: 100%;
@@ -43,16 +43,6 @@ body {
     margin: 20px;
     margin-right: 0px;
     overflow: hidden; }
-  .content .side {
-    width: 25%;
-    flex: 25%;
-    display: flex;
-    margin: 10px;
-    flex-direction: column;
-    justify-content: space-between; }
-    .content .side .box {
-      height: 100%;
-      margin: 10px; }
   @media (max-width: 1000px) {
     .content {
       display: block; }
@@ -62,53 +52,37 @@ body {
         .content .main .landing {
           height: auto; }
       .content .side {
-        width: 100%;
-        margin: 0px; }
+        width: 100%; }
         .content .side .box {
           height: auto;
           padding: 10px; } }
 
-.side .box {
+.side {
+  width: 25%;
+  flex: 25%;
   display: flex;
-  position: relative;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center; }
-  .side .box .box-content .title {
-    font-size: 1.5em; }
-  .side .box .box-content .description {
-    font-size: 1.2em; }
-  .side .box .box-content .date {
-    font-size: 1.2em; }
-  .side .box:hover .hover {
-    opacity: 1; }
-  .side .box .hover {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
-    font-size: 1.5em;
-    transition: all 0.25s; }
-.side .tensoriot {
-  background-color: #00C8F2;
-  color: #414141; }
-.side .hackplus {
-  background-color: #9137FF;
-  color: #ffffff; }
-.side .codeday {
-  background-color: #FF515E;
-  color: #ffffff; }
-.side .usf {
-  background-color: #004D38;
-  color: #FFBC00; }
+  margin: 20px 20px 20px 10px;
+  flex-direction: column; }
+  .side .section {
+    margin-bottom: 10px; }
+    .side .section .section-title {
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: 1.2em; }
+    .side .section .section-content {
+      display: table; }
+      .side .section .section-content .row {
+        display: flex;
+        align-items: baseline;
+        font-size: 1.2em;
+        margin: 10px 0 10px 0;
+        position: relative; }
+        .side .section .section-content .row .icon {
+          min-width: 40px;
+          text-align: center; }
+          .side .section .section-content .row .icon .fa {
+            margin-left: 5px;
+            margin-right: 10px; }
 
 .landing {
   width: 100%;
