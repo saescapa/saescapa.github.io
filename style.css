@@ -32,17 +32,9 @@
 }
 
 :root {
-  --bg: #fafaf7;
+  --bg: #f3f1eb;
   --fg: #1a1a1a;
-  --muted: #6b6b66;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #111110;
-    --fg: #e8e8e3;
-    --muted: #8f8f88;
-  }
+  --muted: #6b6a63;
 }
 
 body {
