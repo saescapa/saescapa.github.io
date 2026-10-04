@@ -82,7 +82,6 @@ h2 {
 }
 
 .cards {
-  position: relative;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1rem;
@@ -164,35 +163,9 @@ h2 {
 }
 
 .past {
-  display: none;
-}
-
-@media (min-width: 1360px) {
-  .past {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: calc(100% + 1.5rem);
-    width: 240px;
-    padding: 1rem;
-    border-radius: 14px;
-    background: #fff;
-    font-size: 0.8rem;
-    line-height: 1.5;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.2s ease, visibility 0.2s;
-  }
-
-  .card-zendesk:hover + .past {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .past ul {
-    margin: 0.5rem 0 0;
-    padding-left: 1rem;
-  }
+  margin: 1rem 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
 }
 
 .cards-small {
@@ -424,10 +397,20 @@ footer {
   color: var(--muted);
 }
 
+@media (max-width: 600px) {
+  .card,
+  .cards-small .card {
+    min-height: auto;
+  }
+
+  .card-line {
+    margin-top: 1rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .card,
-  .card-catx .card-title,
-  .past {
+  .card-catx .card-title {
     transition: none;
   }
 
