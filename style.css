@@ -247,7 +247,9 @@ h2 {
 }
 
 .cards-small .card-vjs {
-  padding: 0.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
 }
 
 .vjs-frame {
@@ -257,8 +259,20 @@ h2 {
   gap: calc(var(--px) * 3);
   padding: calc(var(--px) * 3) calc(var(--px) * 4) calc(var(--px) * 4);
   background: #a7c957;
-  box-shadow: 0 0 0 var(--px) #1f2738 inset, calc(var(--px) * 2) calc(var(--px) * 2) 0 #c9e27a inset, calc(var(--px) * -2) calc(var(--px) * -2) 0 #6a8a2a inset;
+  position: relative;
+  box-shadow: calc(var(--px) * 2) calc(var(--px) * 2) 0 #c9e27a inset, calc(var(--px) * -2) calc(var(--px) * -2) 0 #6a8a2a inset;
   clip-path: var(--step);
+}
+
+.vjs-frame::before {
+  --dots-x: repeating-linear-gradient(90deg, #1f2738 0 var(--px), transparent var(--px) calc(var(--px) * 2));
+  --dots-y: repeating-linear-gradient(0deg, #1f2738 0 var(--px), transparent var(--px) calc(var(--px) * 2));
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--dots-x) top / 100% var(--px), var(--dots-x) bottom / 100% var(--px), var(--dots-y) left / var(--px) 100%, var(--dots-y) right / var(--px) 100%;
+  background-repeat: no-repeat;
 }
 
 .vjs-bar {
