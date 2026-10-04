@@ -31,11 +31,158 @@
   font-display: swap;
 }
 
-/* Base Styles */
+:root {
+  --bg: #fafaf7;
+  --fg: #1a1a1a;
+  --muted: #6b6b66;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111110;
+    --fg: #e8e8e3;
+    --muted: #8f8f88;
+  }
+}
+
 body {
   font-family: 'iA Writer Quattro S', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.6;
   max-width: 800px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 3rem 1rem;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+a {
+  color: inherit;
+}
+
+header h1 {
+  font-size: 1.75rem;
+  margin: 0;
+}
+
+header p {
+  margin: 0;
+  color: var(--muted);
+}
+
+section {
+  margin-top: 3rem;
+}
+
+h2 {
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-height: 170px;
+  padding: 1.25rem;
+  border-radius: 14px;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+.card-meta {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.card-line {
+  margin-top: auto;
+  font-size: 0.95rem;
+}
+
+.card-slingshot {
+  color: #fff;
+  background: linear-gradient(135deg, #ff6a3d, #ff2d75 55%, #7b2cff);
+}
+
+.card-slingshot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.16) 0 3px, transparent 3px 10px);
+  mask-image: linear-gradient(to top left, #000, transparent 60%);
+}
+
+.card-zendesk {
+  color: #f3f0ea;
+  background: #03363d;
+}
+
+.card-zendesk .card-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 400;
+  font-size: 1.75rem;
+}
+
+.card-zendesk .card-meta {
+  color: #d1f470;
+  opacity: 1;
+}
+
+.card-catx {
+  color: #e6e6e6;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  background:
+    radial-gradient(120% 120% at 50% 45%, transparent 40%, #050505 100%),
+    repeating-radial-gradient(circle at 85% 15%, transparent 0 14px, rgba(255, 255, 255, 0.09) 14px 15px),
+    #050505;
+}
+
+.card-catx .card-title {
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  transition: text-shadow 0.3s ease;
+}
+
+.card-catx:hover .card-title {
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+}
+
+footer {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .card-catx .card-title {
+    transition: none;
+  }
+
+  .card:hover {
+    transform: none;
+  }
 }
