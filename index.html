@@ -29,7 +29,20 @@
         ]
     }
     </script>
+    <script>
+        try {
+            const theme = localStorage.getItem('theme');
+            if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+        } catch {}
+    </script>
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="cards/slingshot/slingshot.css" />
+    <link rel="stylesheet" href="cards/zendesk/zendesk.css" />
+    <link rel="stylesheet" href="cards/catx/catx.css" />
+    <link rel="stylesheet" href="cards/vjs/vjs.css" />
+    <link rel="stylesheet" href="cards/consulting/consulting.css" />
+    <link rel="stylesheet" href="cards/wkt/wkt.css" />
+    <link rel="stylesheet" href="cards/wkt-docs/wkt-docs.css" />
 </head>
 
 <body>
@@ -42,16 +55,20 @@
         <section>
             <h2>Work</h2>
             <div class="cards">
-                <a class="card card-slingshot" href="https://slingshot.fm">
-                    <span class="card-meta">CTO · 2022–now</span>
-                    <strong class="card-title">Slingshot</strong>
-                    <span class="card-line">Building modern business tools for creatives, from zero to market.</span>
-                </a>
-                <a class="card card-zendesk" href="https://zendesk.com">
-                    <span class="card-meta">Senior Software Engineer · 2019–2022</span>
-                    <strong class="card-title">Zendesk</strong>
-                    <span class="card-line">Intern to senior in two years, building the next-gen interface of the core product.</span>
-                </a>
+                <slingshot-card>
+                    <a class="card card-slingshot" href="https://slingshot.fm">
+                        <span class="card-meta">CTO · 2022–now</span>
+                        <strong class="card-title">Slingshot</strong>
+                        <span class="card-line">Building modern business tools for creatives, from zero to market.</span>
+                    </a>
+                </slingshot-card>
+                <zendesk-card>
+                    <a class="card card-zendesk" href="https://zendesk.com">
+                        <span class="card-meta">Senior Software Engineer · 2019–2022</span>
+                        <strong class="card-title">Zendesk</strong>
+                        <span class="card-line">Intern to senior in two years, building the next-gen interface of the core product.</span>
+                    </a>
+                </zendesk-card>
             </div>
             <p class="past">Before: CS @ USF '20 · internships in Madrid · hackathons: 10+ organized / 30+ attended</p>
         </section>
@@ -59,38 +76,64 @@
         <section>
             <h2>Projects</h2>
             <div class="cards cards-small">
-                <a class="card card-catx" href="https://catx-studios.com">
-                    <span class="card-meta">ongoing</span>
-                    <strong class="card-title">catx-studios</strong>
-                    <span class="card-line">Light maestro for raves / concerts.</span>
-                </a>
-                <div class="card card-pending card-vjs">
-                    <div class="vjs-frame">
-                        <div class="vjs-bar"><span>VJS.EXE</span><span class="vjs-dots"><i></i><i></i><i></i></span></div>
-                        <div class="vjs-screen">
-                            <strong class="card-title">VJS</strong>
-                            <span class="card-line">Software for live lighting control.</span>
+                <catx-card data-playground>
+                    <a class="card card-catx" href="https://catx-studios.com">
+                        <span class="card-meta">ongoing</span>
+                        <strong class="card-title">catx-studios</strong>
+                        <span class="card-line">Light maestro for raves / concerts.</span>
+                    </a>
+                </catx-card>
+                <vjs-card data-playground>
+                    <div class="card card-pending card-vjs">
+                        <div class="vjs-frame">
+                            <div class="vjs-bar"><span>VJS.EXE</span><span class="vjs-dots"><i></i><i></i><i></i></span></div>
+                            <div class="vjs-screen">
+                                <strong class="card-title">VJS</strong>
+                                <span class="card-line">Software for live lighting control.</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="card card-pending card-consulting">
-                    <strong class="card-title">Consulting</strong>
-                    <span class="card-line">Product, frontend, and AI-assisted dev workflows.</span>
-                </div>
+                </vjs-card>
+                <consulting-card>
+                    <div class="card card-consulting">
+                        <div class="lh-scene" aria-hidden="true">
+                            <div class="lh-stars"></div>
+                            <div class="lh-beam"></div>
+                            <div class="lh-cloud"></div>
+                            <div class="lh-sea"></div>
+                            <div class="lh-cliff"></div>
+                            <div class="lh-house"></div>
+                            <div class="lh-window"></div>
+                            <div class="lh-roof"></div>
+                            <div class="lh-chimney"></div>
+                            <div class="lh-tower"></div>
+                            <div class="lh-gallery"></div>
+                            <div class="lh-lantern"></div>
+                            <div class="lh-cap"></div>
+                            <div class="lh-lamp"></div>
+                        </div>
+                        <strong class="card-title">Consulting</strong>
+                        <span class="card-line">Product, frontend, and AI-assisted dev workflows.</span>
+                    </div>
+                </consulting-card>
             </div>
         </section>
 
         <section>
             <h2>Open Source</h2>
             <div class="cards cards-small">
-                <div class="card card-pending card-wkt">
-                    <strong class="card-title">wkt</strong>
-                    <span class="card-line">Workspace manager for parallel work on git worktrees.</span>
-                </div>
-                <div class="card card-pending card-wkt-docs">
-                    <strong class="card-title">wkt-docs</strong>
-                    <span class="card-line">Private plans and notes per project, synced across machines.</span>
-                </div>
+                <wkt-card data-playground>
+                    <div class="card card-pending card-wkt">
+                        <strong class="card-title">wkt</strong>
+                        <span class="card-line">Workspace manager for parallel work on git worktrees.</span>
+                    </div>
+                </wkt-card>
+                <wkt-docs-card data-playground>
+                    <div class="card card-pending card-wkt-docs">
+                        <strong class="card-title">wkt-docs</strong>
+                        <span class="card-line">Private plans and notes per project, synced across machines.</span>
+                    </div>
+                </wkt-docs-card>
             </div>
         </section>
 
@@ -98,8 +141,10 @@
             <a href="https://www.github.com/saescapa">GitHub</a>
             <a href="https://www.linkedin.com/in/samuel-escapa">LinkedIn</a>
             <a href="https://www.twitter.com/SamuelEscapa">Twitter</a>
+            <button class="theme-toggle" type="button" aria-pressed="false" hidden>Playground</button>
         </footer>
     </main>
+    <script type="module" src="cards/index.js"></script>
 </body>
 
 </html>

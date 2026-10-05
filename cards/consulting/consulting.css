@@ -1,0 +1,275 @@
+.card-consulting {
+  --card-bg: linear-gradient(#a8c2db, #d2dfeb 72%);
+  --card-border: rgba(29, 42, 58, 0.35);
+  --ink: #1d2a3a;
+  --ink-soft: #1d2a3a;
+  --sea-top: #7fb3bd;
+  --sea: #2e7383;
+  --grass: #5f6e3a;
+  --cliff: #a67c4e;
+  --cliff-shade: #8a6540;
+  --house: #f7f5ee;
+  --roof: #b03535;
+  --chimney: #4a4a4a;
+  --tower-a: #ffffff;
+  --tower-b: #dedad0;
+  --iron: #222222;
+  --night: 0;
+  container-type: inline-size;
+  color: var(--ink);
+  cursor: default;
+  background: var(--card-bg);
+  border: 1px dashed var(--card-border);
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+.card-consulting:hover {
+  transform: none;
+}
+
+:root[data-theme="dark"] .card-consulting {
+  --card-bg: linear-gradient(#0b1424, #142238 72%);
+  --card-border: rgba(201, 206, 219, 0.28);
+  --ink: #f3f0e6;
+  --ink-soft: #c9cedb;
+  --sea-top: #2a4a5c;
+  --sea: #11303b;
+  --grass: #26301f;
+  --cliff: #3a2e22;
+  --cliff-shade: #2c2218;
+  --house: #c9c5b8;
+  --roof: #6e2424;
+  --chimney: #2c2c2c;
+  --tower-a: #f1eee5;
+  --tower-b: #b9b5a9;
+  --iron: #111111;
+  --night: 1;
+}
+
+.cards-small .card-consulting {
+  min-height: 90px;
+  padding-bottom: 3.5rem;
+}
+
+.card-consulting .card-title,
+.card-consulting .card-line {
+  position: relative;
+}
+
+.card-consulting .card-line {
+  max-width: calc(100% - 4.5rem);
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+}
+
+.lh-scene {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 260px;
+  height: 170px;
+  transform: scale(0.96);
+  transform-origin: 100% 100%;
+  pointer-events: none;
+}
+
+.lh-scene > * {
+  position: absolute;
+}
+
+.lh-sea {
+  right: 0;
+  bottom: 0;
+  width: 800px;
+  height: 28px;
+  background: linear-gradient(var(--sea-top) 0 1.5px, var(--sea) 1.5px);
+}
+
+.lh-cliff {
+  right: 0;
+  bottom: 20px;
+  width: 165px;
+  height: 32px;
+  background: linear-gradient(var(--grass) 0 4.5px, var(--cliff) 4.5px 70%, var(--cliff-shade) 70%);
+  clip-path: polygon(0 100%, 6% 30%, 22% 20%, 50% 24%, 80% 16%, 100% 18%, 100% 100%);
+}
+
+.lh-house {
+  right: 49px;
+  bottom: 48px;
+  width: 35px;
+  height: 17px;
+  background: var(--house);
+}
+
+.lh-roof {
+  right: 46px;
+  bottom: 65px;
+  width: 41px;
+  height: 11px;
+  background: var(--roof);
+  clip-path: polygon(0 100%, 22% 0, 78% 0, 100% 100%);
+}
+
+.lh-chimney {
+  right: 72px;
+  bottom: 73px;
+  width: 4px;
+  height: 6px;
+  background: var(--chimney);
+}
+
+.lh-tower {
+  right: 28px;
+  bottom: 48px;
+  width: 12px;
+  height: 80px;
+  background: linear-gradient(90deg, var(--tower-a), var(--tower-b));
+  clip-path: polygon(20% 0, 80% 0, 100% 100%, 0 100%);
+}
+
+.lh-gallery {
+  right: 25px;
+  bottom: 127px;
+  width: 18px;
+  height: 2.5px;
+  background: var(--iron);
+}
+
+.lh-lantern {
+  right: 30.5px;
+  bottom: 129.5px;
+  width: 7px;
+  height: 6px;
+  background: var(--iron);
+  border-radius: 1px 1px 0 0;
+}
+
+.lh-cap {
+  right: 29.5px;
+  bottom: 135.5px;
+  width: 9px;
+  height: 3.5px;
+  background: var(--iron);
+  clip-path: polygon(0 100%, 50% 0, 100% 100%);
+}
+
+.lh-cloud {
+  right: -20px;
+  top: 30px;
+  width: 80px;
+  height: 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  animation: lh-drift 40s linear infinite;
+  will-change: transform;
+}
+
+:root[data-theme="dark"] .lh-cloud {
+  opacity: 0;
+}
+
+.lh-stars,
+.lh-beam,
+.lh-lamp,
+.lh-window {
+  opacity: var(--night);
+  transition: opacity 0.6s ease;
+}
+
+.lh-stars {
+  right: 0;
+  top: 0;
+  width: 400px;
+  height: 170px;
+  background-image:
+    radial-gradient(0.7px 0.7px at 170px 25px, #ffffff 50%, transparent 55%),
+    radial-gradient(0.6px 0.6px at 230px 14px, #ffffff 50%, transparent 55%),
+    radial-gradient(0.8px 0.8px at 290px 35px, #ffffff 50%, transparent 55%),
+    radial-gradient(0.6px 0.6px at 265px 70px, #cfd8ea 50%, transparent 55%),
+    radial-gradient(0.6px 0.6px at 200px 55px, #cfd8ea 50%, transparent 55%),
+    radial-gradient(0.75px 0.75px at 325px 15px, #ffffff 50%, transparent 55%),
+    radial-gradient(0.6px 0.6px at 385px 75px, #cfd8ea 50%, transparent 55%),
+    radial-gradient(0.6px 0.6px at 15px 50px, #cfd8ea 50%, transparent 55%),
+    radial-gradient(0.7px 0.7px at 60px 20px, #ffffff 50%, transparent 55%),
+    radial-gradient(0.6px 0.6px at 100px 80px, #cfd8ea 50%, transparent 55%),
+    radial-gradient(0.8px 0.8px at 125px 35px, #ffffff 50%, transparent 55%);
+}
+
+.lh-beam {
+  right: -266px;
+  top: -263px;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0deg, rgba(255, 236, 170, 0.26) 12deg, rgba(255, 236, 170, 0.06) 24deg, transparent 32deg);
+  will-change: transform;
+}
+
+:root[data-theme="dark"] .lh-beam {
+  animation: lh-sweep 8s linear infinite;
+}
+
+.lh-lamp {
+  right: 32px;
+  bottom: 131px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #fff5cc;
+  box-shadow: 0 0 6px 2.5px rgba(255, 236, 170, 0.75);
+}
+
+:root[data-theme="dark"] .lh-lamp {
+  animation: lh-lamp 8s linear infinite;
+}
+
+.lh-window {
+  right: 68px;
+  bottom: 52px;
+  width: 4px;
+  height: 5px;
+  background: #ffd77a;
+  box-shadow: 0 0 3px 1px rgba(255, 215, 122, 0.5);
+}
+
+@keyframes lh-drift {
+  from { transform: translateX(0); }
+  to { transform: translateX(-70px); }
+}
+
+@keyframes lh-sweep {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes lh-lamp {
+  0%, 80% { opacity: 0.55; transform: scale(1); }
+  90% { opacity: 1; transform: scale(1.35); }
+  100% { opacity: 0.55; transform: scale(1); }
+}
+
+@container (max-width: 200px) {
+  .lh-scene {
+    transform: scale(0.72);
+  }
+
+  .card-consulting .card-line {
+    max-width: calc(100% - 3rem);
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .cards-small .card-consulting {
+    min-height: 90px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme="dark"] .lh-beam,
+  :root[data-theme="dark"] .lh-lamp,
+  .lh-cloud {
+    animation: none;
+  }
+}

@@ -1,0 +1,75 @@
+.card-wkt {
+  color: #1f2a1c;
+  background: #e4ecdf;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+.card-wkt .card-title::before {
+  content: '$ ';
+  color: #3f8f3a;
+}
+
+.wkt-playground {
+  display: none;
+}
+
+:root[data-theme="dark"] .card-wkt {
+  color: #cfe8c8;
+  background: #141a14;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+:root[data-theme="dark"] .card-wkt:hover {
+  transform: none;
+}
+
+:root[data-theme="dark"] .card-wkt .card-title::before {
+  color: #5fbf57;
+}
+
+:root[data-theme="dark"] .card-wkt .card-title {
+  font-size: 0.95rem;
+  overflow-wrap: anywhere;
+}
+
+:root[data-theme="dark"] .wkt-playground {
+  display: flex;
+}
+
+.wkt-picker {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.15rem;
+  font-size: 0.75rem;
+  color: #7fa879;
+}
+
+.wkt-picker select {
+  min-width: 0;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid rgba(95, 191, 87, 0.4);
+  border-radius: 6px;
+  background: #141a14;
+  color: #cfe8c8;
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.wkt-picker select:focus-visible {
+  outline: 1px solid #5fbf57;
+  outline-offset: 2px;
+}
+
+.wkt-diffstat {
+  gap: 0.5rem;
+  margin: 0.25rem 0;
+  font-size: 0.85rem;
+}
+
+.wkt-added {
+  color: #5fbf57;
+}
+
+.wkt-removed {
+  color: #e5675b;
+}

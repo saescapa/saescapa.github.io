@@ -1,0 +1,117 @@
+.card-wkt-docs {
+  color: #2a2620;
+  background:
+    linear-gradient(90deg, transparent 10px, rgba(220, 80, 70, 0.45) 10px 11px, transparent 11px),
+    repeating-linear-gradient(transparent 0 23px, rgba(60, 100, 160, 0.16) 23px 24px),
+    #fbf8ef;
+}
+
+.cards-small .card-wkt-docs {
+  padding-left: 1.75rem;
+}
+
+.card-wkt-docs .card-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.card-wkt-docs canvas {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.docs-note {
+  display: none;
+  margin: 6px 0 0;
+}
+
+.docs-note label {
+  display: block;
+}
+
+.docs-note input,
+.docs-ghost {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 23px;
+  color: #9fb8e6;
+}
+
+.docs-note input {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid rgba(220, 80, 70, 0.35);
+  border-radius: 0;
+  background: transparent;
+  outline: none;
+}
+
+.docs-note input::placeholder {
+  color: rgba(159, 184, 230, 0.45);
+}
+
+.docs-note input:focus-visible {
+  border-bottom-color: #9fb8e6;
+}
+
+.docs-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.docs-ghost {
+  position: absolute;
+  z-index: 2;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.docs-message {
+  position: absolute;
+  z-index: 2;
+  translate: -50% 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-size: 1rem;
+  white-space: nowrap;
+  color: #cfe0ff;
+  opacity: 0;
+  pointer-events: none;
+}
+
+:root[data-theme="dark"] .card-wkt-docs {
+  color: #e8e3d6;
+  background:
+    linear-gradient(90deg, transparent 10px, rgba(220, 80, 70, 0.35) 10px 11px, transparent 11px),
+    repeating-linear-gradient(transparent 0 23px, rgba(255, 255, 255, 0.07) 23px 24px),
+    #1c1a16;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+:root[data-theme="dark"] .card-wkt-docs:hover {
+  transform: none;
+}
+
+:root[data-theme="dark"] wkt-docs-card[data-mode="canvas"] canvas {
+  display: block;
+}
+
+:root[data-theme="dark"] wkt-docs-card[data-mode="input"] .docs-note {
+  display: block;
+}

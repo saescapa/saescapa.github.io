@@ -1,0 +1,48 @@
+.card-catx {
+  color: #e6e6e6;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  background:
+    radial-gradient(120% 120% at 50% 45%, transparent 40%, #050505 100%),
+    repeating-radial-gradient(circle at 85% 15%, transparent 0 14px, rgba(255, 255, 255, 0.09) 14px 15px),
+    #050505;
+}
+
+.card-catx .card-title {
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  transition: text-shadow 0.3s ease;
+}
+
+.card-catx:hover .card-title {
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+}
+
+.card-catx canvas {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+:root[data-theme="dark"] .card-catx {
+  background: #050505;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  cursor: default;
+}
+
+:root[data-theme="dark"] .card-catx:hover {
+  transform: none;
+}
+
+:root[data-theme="dark"] .card-catx canvas {
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-catx .card-title {
+    transition: none;
+  }
+}
