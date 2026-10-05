@@ -197,10 +197,10 @@ consulting-card {
 }
 
 .lh-beam {
-  right: -266px;
-  top: -263px;
-  width: 600px;
-  height: 600px;
+  right: -516px;
+  top: -513px;
+  width: 1100px;
+  height: 1100px;
   border-radius: 50%;
   background: conic-gradient(from 0deg, transparent 0deg, rgba(255, 236, 170, 0.26) 12deg, rgba(255, 236, 170, 0.06) 24deg, transparent 32deg);
   will-change: transform;

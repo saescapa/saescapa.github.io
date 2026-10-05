@@ -4,11 +4,14 @@
   const { CHANNELS_PER_FIXTURE, FIXTURE_COUNT, clearDMX, commit, dmx, subscribe } = window.site.dmx;
   const { getTheme, onThemeChange } = window.site.theme;
 
-  const MIN_BPM = 60;
-  const MAX_BPM = 200;
+  const MIN_BPM = 30;
+  const MAX_BPM = 180;
+  const TEMPOS = [30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 124, 128, 130, 140, 150, 160, 170, 174, 180];
   const DEFAULT_BPM = 128;
   const MAX_DIMMER = 255;
-  const PATTERN_BEATS = 8;
+  const DEFAULT_DIMMER = 65;
+  const PATTERN_STEPS = 8;
+  const STEPS_PER_BEAT = 2;
   const STROBE_WINDOW = 0.15;
   const WARM_WHITE = [255, 206, 150];
   const WHITE = [255, 255, 255];
@@ -59,9 +62,9 @@
     },
     {
       name: 'CHASE',
-      run: ({ beats, step, phase }, set) => {
-        const color = CHASE_COLORS[Math.floor(beats / PATTERN_BEATS) % CHASE_COLORS.length];
-        const trailing = (step + PATTERN_BEATS - 1) % PATTERN_BEATS;
+      run: ({ steps, step, phase }, set) => {
+        const color = CHASE_COLORS[Math.floor(steps / PATTERN_STEPS) % CHASE_COLORS.length];
+        const trailing = (step + PATTERN_STEPS - 1) % PATTERN_STEPS;
         for (let fixture = 0; fixture < FIXTURE_COUNT; fixture++) {
           let level = 0;
           if (fixture === step) level = 1;
@@ -75,8 +78,8 @@
     },
     {
       name: 'RAINBOW',
-      run: ({ beats, step }, set) => {
-        const rotation = ((beats / PATTERN_BEATS) % 1) * 360;
+      run: ({ steps, step }, set) => {
+        const rotation = ((steps / PATTERN_STEPS) % 1) * 360;
         for (let fixture = 0; fixture < FIXTURE_COUNT; fixture++) {
           setHue(set, fixture, fixture <= step ? 1 : 0, (fixture * HUE_STEP + rotation) % 360);
         }
@@ -94,14 +97,14 @@
   class VJSCard extends HTMLElement {
     connectedCallback() {
       this.bpm = DEFAULT_BPM;
-      this.master = MAX_DIMMER;
+      this.master = DEFAULT_DIMMER;
       this.effect = 0;
       this.beats = 0;
       this.lastTime = 0;
       this.frame = 0;
       this.changed = false;
       this.readoutText = '';
-      this.beatFrame = { beats: 0, step: 0, phase: 0, bpm: DEFAULT_BPM };
+      this.beatFrame = { steps: 0, step: 0, phase: 0 };
       this.setFixture = (fixture, level, red, green, blue) => this.writeFixture(fixture, level, red, green, blue);
       this.build();
       this.unsubscribeDMX = subscribe(() => this.renderReadout());
@@ -123,27 +126,41 @@
       this.panel = document.createElement('div');
       this.panel.className = 'vjs-panel';
       this.panel.innerHTML = `
-        <label class="vjs-field">BPM <input type="number" min="${MIN_BPM}" max="${MAX_BPM}" step="1" value="${DEFAULT_BPM}" inputmode="numeric"></label>
-        <label class="vjs-field">DIM <input type="range" min="0" max="${MAX_DIMMER}" step="1" value="${MAX_DIMMER}"></label>
-        <button type="button"></button>
+        <div class="vjs-field">
+          <label for="vjs-bpm">BPM</label>
+          <span class="vjs-stepper">
+            <button type="button" class="vjs-step" aria-label="Decrease BPM">\u2212</button>
+            <input id="vjs-bpm" type="number" min="${MIN_BPM}" max="${MAX_BPM}" step="1" value="${DEFAULT_BPM}" inputmode="numeric">
+            <button type="button" class="vjs-step" aria-label="Increase BPM">+</button>
+          </span>
+        </div>
+        <label class="vjs-field">DIM <input type="range" min="0" max="${MAX_DIMMER}" step="1" value="${DEFAULT_DIMMER}"></label>
+        <button type="button" class="vjs-fx"></button>
         <output class="vjs-readout" aria-live="off"></output>`;
       this.bpmInput = this.panel.querySelector('input[type="number"]');
       this.dimInput = this.panel.querySelector('input[type="range"]');
-      this.fxButton = this.panel.querySelector('button');
+      this.fxButton = this.panel.querySelector('.vjs-fx');
+      [this.bpmDown, this.bpmUp] = this.panel.querySelectorAll('.vjs-step');
       this.readout = this.panel.querySelector('output');
       this.querySelector('.vjs-screen').append(this.panel);
 
       this.bpmInput.addEventListener('input', () => {
         const value = this.bpmInput.valueAsNumber;
-        if (value >= MIN_BPM && value <= MAX_BPM) this.bpm = Math.round(value);
+        if (value >= MIN_BPM && value <= MAX_BPM) {
+          this.bpm = Math.round(value);
+          this.renderStepButtons();
+        }
       });
       const commitBPM = () => {
         const value = this.bpmInput.valueAsNumber;
         if (Number.isFinite(value)) this.bpm = Math.min(MAX_BPM, Math.max(MIN_BPM, Math.round(value)));
         this.bpmInput.value = String(this.bpm);
+        this.renderStepButtons();
       };
       this.bpmInput.addEventListener('change', commitBPM);
       this.bpmInput.addEventListener('blur', commitBPM);
+      this.bpmDown.addEventListener('click', () => this.setBPM([...TEMPOS].reverse().find((tempo) => tempo < this.bpm) ?? MIN_BPM));
+      this.bpmUp.addEventListener('click', () => this.setBPM(TEMPOS.find((tempo) => tempo > this.bpm) ?? MAX_BPM));
       this.dimInput.addEventListener('input', () => {
         this.master = Number(this.dimInput.value);
       });
@@ -153,6 +170,18 @@
       });
       this.renderEffect();
       this.renderReadout();
+      this.renderStepButtons();
+    }
+
+    setBPM(bpm) {
+      this.bpm = bpm;
+      this.bpmInput.value = String(bpm);
+      this.renderStepButtons();
+    }
+
+    renderStepButtons() {
+      this.bpmDown.disabled = this.bpm <= MIN_BPM;
+      this.bpmUp.disabled = this.bpm >= MAX_BPM;
     }
 
     renderEffect() {
@@ -212,10 +241,9 @@
       this.beats += (Math.max(0, now - this.lastTime) * this.bpm) / 60000;
       this.lastTime = now;
       const frame = this.beatFrame;
-      frame.beats = this.beats;
-      frame.step = Math.floor(this.beats) % PATTERN_BEATS;
-      frame.phase = this.beats % 1;
-      frame.bpm = this.bpm;
+      frame.steps = this.beats * STEPS_PER_BEAT;
+      frame.step = Math.floor(frame.steps) % PATTERN_STEPS;
+      frame.phase = frame.steps % 1;
       this.changed = false;
       const effect = EFFECTS[this.effect];
       if (reducedMotion.matches) effect.rest(this.setFixture);
