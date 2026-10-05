@@ -75,8 +75,14 @@ a {
   cursor: pointer;
 }
 
-.theme-toggle[hidden] {
-  display: none;
+.theme-fade body,
+.theme-fade .card {
+  transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
 }
 
 header h1 {

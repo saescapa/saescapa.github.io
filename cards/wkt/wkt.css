@@ -17,6 +17,17 @@
   color: #cfe8c8;
   background: #141a14;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  overflow: visible;
+}
+
+:root[data-theme="dark"] wkt-card {
+  z-index: 2;
+}
+
+@media (min-width: 460px) {
+  :root[data-theme="dark"] wkt-card {
+    grid-column: span 2;
+  }
 }
 
 :root[data-theme="dark"] .card-wkt:hover {
@@ -28,36 +39,80 @@
 }
 
 :root[data-theme="dark"] .card-wkt .card-title {
-  font-size: 0.95rem;
-  overflow-wrap: anywhere;
+  font-size: 0.85rem;
 }
 
 :root[data-theme="dark"] .wkt-playground {
   display: flex;
 }
 
-.wkt-picker {
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0.15rem;
-  font-size: 0.75rem;
-  color: #7fa879;
+.wkt-switch {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
 }
 
-.wkt-picker select {
-  min-width: 0;
-  padding: 0.2rem 0.4rem;
-  border: 1px solid rgba(95, 191, 87, 0.4);
-  border-radius: 6px;
+.wkt-switch-button {
+  padding: 0 0.4em;
+  border: 1px solid #2e4a2a;
+  border-radius: 2px;
   background: #141a14;
   color: #cfe8c8;
   font: inherit;
-  font-size: 0.8rem;
+  cursor: pointer;
 }
 
-.wkt-picker select:focus-visible {
+.wkt-switch-button:hover {
+  border-color: #5fbf57;
+}
+
+.wkt-switch-button:focus-visible,
+.wkt-switch-list:focus-visible {
   outline: 1px solid #5fbf57;
   outline-offset: 2px;
+}
+
+.wkt-switch-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 10;
+  min-width: 100%;
+  margin: 0;
+  padding: 2px 0;
+  border: 1px solid #2e4a2a;
+  border-radius: 2px;
+  background: #141a14;
+  list-style: none;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-align: left;
+}
+
+.wkt-switch-list[hidden] {
+  display: none;
+}
+
+.wkt-switch-option {
+  padding: 2px 0.6em 2px 0.4em;
+  color: #cfe8c8;
+  cursor: pointer;
+}
+
+.wkt-switch-active {
+  background: #22301f;
+}
+
+.wkt-switch-mark {
+  display: inline-block;
+  width: 1.5ch;
+  color: #5fbf57;
+  visibility: hidden;
+}
+
+.wkt-switch-option[aria-selected="true"] .wkt-switch-mark {
+  visibility: visible;
 }
 
 .wkt-diffstat {

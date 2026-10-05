@@ -1,53 +1,86 @@
-import { dmx, setDMX, subscribe } from '../dmx.js';
+import { CHANNELS_PER_FIXTURE, FIXTURE_COUNT, clearDMX, commit, dmx, subscribe } from '../dmx.js';
 import { getTheme, onThemeChange } from '../theme.js';
 
 const MIN_BPM = 60;
 const MAX_BPM = 200;
 const DEFAULT_BPM = 128;
 const MAX_DIMMER = 255;
-const MAX_FLASHES_PER_SECOND_BPM = 180;
+const PATTERN_BEATS = 8;
+const STROBE_WINDOW = 0.15;
 const WARM_WHITE = [255, 206, 150];
 const WHITE = [255, 255, 255];
 const CHASE_COLORS = [[255, 0, 0], [0, 255, 0], [0, 0, 255]];
-const REST_RAINBOW_HUE = 180;
+const HUE_STEP = 360 / FIXTURE_COUNT;
+const PULSE_FLOOR = 0.1;
 
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
-function hueToRGB(hue) {
-  const channel = (offset) => {
-    const k = (offset + hue / 30) % 12;
-    return Math.round(255 * (0.5 - 0.5 * Math.max(-1, Math.min(k - 3, 9 - k, 1))));
-  };
-  return [channel(0), channel(8), channel(4)];
+function hueChannel(hue, offset) {
+  const k = (offset + hue / 30) % 12;
+  return Math.round(255 * (0.5 - 0.5 * Math.max(-1, Math.min(k - 3, 9 - k, 1))));
+}
+
+function setHue(set, fixture, level, hue) {
+  set(fixture, level, hueChannel(hue, 0), hueChannel(hue, 8), hueChannel(hue, 4));
+}
+
+function setColor(set, fixture, level, color) {
+  set(fixture, level, color[0], color[1], color[2]);
 }
 
 const EFFECTS = [
   {
     name: 'PULSE',
-    render: ({ phase }) => ({ level: Math.exp(Math.log(0.1) * phase), color: WARM_WHITE }),
-    still: { level: 1, color: WARM_WHITE },
+    run: ({ step, phase }, set) => {
+      const accent = step % 4 === 0 ? 1 : 0.6;
+      const level = accent * Math.exp(Math.log(PULSE_FLOOR) * phase);
+      for (let fixture = 0; fixture < FIXTURE_COUNT; fixture++) setColor(set, fixture, level, WARM_WHITE);
+    },
+    rest: (set) => {
+      for (let fixture = 0; fixture < FIXTURE_COUNT; fixture++) setColor(set, fixture, 1, WARM_WHITE);
+    },
   },
   {
     name: 'STROBE',
-    render: ({ phase, beat, bpm }) => {
-      const flashEvery = bpm > MAX_FLASHES_PER_SECOND_BPM ? 2 : 1;
-      const on = beat % flashEvery === 0 && phase < 0.15;
-      return { level: on ? 1 : 0, color: WHITE };
+    run: ({ step, phase }, set) => {
+      const lit = phase < STROBE_WINDOW;
+      const evenBeat = step % 2 === 1;
+      for (let fixture = 0; fixture < FIXTURE_COUNT; fixture++) {
+        const onGrid = evenBeat === (fixture % 2 === 1);
+        setColor(set, fixture, lit && onGrid ? 1 : 0, WHITE);
+      }
     },
-    still: { level: 1, color: WHITE },
+    rest: (set) => {
+      for (let fixture = 0; fixture < FIXTURE_COUNT; fixture++) setColor(set, fixture, 1, WHITE);
+    },
   },
   {
     name: 'CHASE',
-    render: ({ beat }) => ({ level: 1, color: CHASE_COLORS[beat % CHASE_COLORS.length] }),
-    still: { level: 1, color: CHASE_COLORS[0] },
+    run: ({ beats, step, phase }, set) => {
+      const color = CHASE_COLORS[Math.floor(beats / PATTERN_BEATS) % CHASE_COLORS.length];
+      const trailing = (step + PATTERN_BEATS - 1) % PATTERN_BEATS;
+      for (let fixture = 0; fixture < FIXTURE_COUNT; fixture++) {
+        let level = 0;
+        if (fixture === step) level = 1;
+        else if (fixture === trailing) level = 0.3 * (1 - phase);
+        setColor(set, fixture, level, color);
+      }
+    },
+    rest: (set) => {
+      for (let fixture = 0; fixture < FIXTURE_COUNT; fixture++) setColor(set, fixture, 1, CHASE_COLORS[0]);
+    },
   },
   {
     name: 'RAINBOW',
-    render: ({ phase, beats }) => ({
-      level: 0.55 + 0.45 * (1 - phase) ** 2,
-      color: hueToRGB(((beats / 4) % 1) * 360),
-    }),
-    still: { level: 1, color: hueToRGB(REST_RAINBOW_HUE) },
+    run: ({ beats, step }, set) => {
+      const rotation = ((beats / PATTERN_BEATS) % 1) * 360;
+      for (let fixture = 0; fixture < FIXTURE_COUNT; fixture++) {
+        setHue(set, fixture, fixture <= step ? 1 : 0, (fixture * HUE_STEP + rotation) % 360);
+      }
+    },
+    rest: (set) => {
+      for (let fixture = 0; fixture < FIXTURE_COUNT; fixture++) setHue(set, fixture, 1, fixture * HUE_STEP);
+    },
   },
 ];
 
@@ -63,6 +96,10 @@ class VJSCard extends HTMLElement {
     this.beats = 0;
     this.lastTime = 0;
     this.frame = 0;
+    this.changed = false;
+    this.readoutText = '';
+    this.beatFrame = { beats: 0, step: 0, phase: 0, bpm: DEFAULT_BPM };
+    this.setFixture = (fixture, level, red, green, blue) => this.writeFixture(fixture, level, red, green, blue);
     this.build();
     this.unsubscribeDMX = subscribe(() => this.renderReadout());
     this.unsubscribeTheme = onThemeChange(() => this.sync());
@@ -120,8 +157,16 @@ class VJSCard extends HTMLElement {
   }
 
   renderReadout() {
-    const text = [...dmx].map((value, channel) => `CH${channel + 1} ${pad(value)}`);
-    this.readout.replaceChildren(...text.map((entry) => Object.assign(document.createElement('span'), { textContent: entry })));
+    const entries = [];
+    for (let channel = 0; channel < CHANNELS_PER_FIXTURE; channel++) {
+      entries.push(`CH${channel + 1} ${pad(dmx[channel])}`);
+    }
+    const text = entries.join(' ');
+    if (text === this.readoutText) return;
+    this.readoutText = text;
+    this.readout.replaceChildren(
+      ...entries.map((entry) => Object.assign(document.createElement('span'), { textContent: entry })),
+    );
   }
 
   sync() {
@@ -129,7 +174,7 @@ class VJSCard extends HTMLElement {
       this.start();
     } else {
       this.stop();
-      if (getTheme() !== 'dark') setDMX([0, 0, 0, 0]);
+      if (getTheme() !== 'dark') clearDMX();
     }
   }
 
@@ -148,15 +193,31 @@ class VJSCard extends HTMLElement {
     this.frame = 0;
   }
 
+  writeFixture(fixture, level, red, green, blue) {
+    const offset = fixture * CHANNELS_PER_FIXTURE;
+    const dimmer = Math.round(level * this.master);
+    if (dmx[offset] !== dimmer || dmx[offset + 1] !== red || dmx[offset + 2] !== green || dmx[offset + 3] !== blue) {
+      dmx[offset] = dimmer;
+      dmx[offset + 1] = red;
+      dmx[offset + 2] = green;
+      dmx[offset + 3] = blue;
+      this.changed = true;
+    }
+  }
+
   advance(now) {
-    this.beats += ((now - this.lastTime) * this.bpm) / 60000;
+    this.beats += (Math.max(0, now - this.lastTime) * this.bpm) / 60000;
     this.lastTime = now;
+    const frame = this.beatFrame;
+    frame.beats = this.beats;
+    frame.step = Math.floor(this.beats) % PATTERN_BEATS;
+    frame.phase = this.beats % 1;
+    frame.bpm = this.bpm;
+    this.changed = false;
     const effect = EFFECTS[this.effect];
-    const { level, color } = reducedMotion.matches
-      ? effect.still
-      : effect.render({ beats: this.beats, beat: Math.floor(this.beats), phase: this.beats % 1, bpm: this.bpm });
-    const next = [Math.round(level * this.master), ...color];
-    if (next.some((value, channel) => value !== dmx[channel])) setDMX(next);
+    if (reducedMotion.matches) effect.rest(this.setFixture);
+    else effect.run(frame, this.setFixture);
+    if (this.changed) commit();
   }
 }
 

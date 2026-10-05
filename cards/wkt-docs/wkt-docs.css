@@ -27,59 +27,30 @@
   cursor: crosshair;
 }
 
-.docs-note {
+.docs-clear {
   display: none;
-  margin: 6px 0 0;
-}
-
-.docs-note label {
-  display: block;
-}
-
-.docs-note input,
-.docs-ghost {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-style: italic;
-  font-size: 1rem;
-  line-height: 23px;
-  color: #9fb8e6;
-}
-
-.docs-note input {
-  box-sizing: border-box;
-  display: block;
-  width: 100%;
-  height: 24px;
-  padding: 0;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  z-index: 3;
+  min-width: 24px;
+  min-height: 24px;
+  padding: 0 0.5rem;
   border: 0;
-  border-bottom: 1px solid rgba(220, 80, 70, 0.35);
-  border-radius: 0;
-  background: transparent;
-  outline: none;
+  background: none;
+  color: rgba(232, 227, 214, 0.5);
+  font: inherit;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 0.7rem;
+  cursor: pointer;
 }
 
-.docs-note input::placeholder {
-  color: rgba(159, 184, 230, 0.45);
+.docs-clear:hover {
+  color: #e8e3d6;
 }
 
-.docs-note input:focus-visible {
-  border-bottom-color: #9fb8e6;
-}
-
-.docs-sr {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-.docs-ghost {
-  position: absolute;
-  z-index: 2;
-  white-space: nowrap;
-  pointer-events: none;
+.docs-clear:focus-visible {
+  outline: 1px solid #9fb8e6;
 }
 
 .docs-message {
@@ -108,10 +79,10 @@
   transform: none;
 }
 
-:root[data-theme="dark"] wkt-docs-card[data-mode="canvas"] canvas {
+:root[data-theme="dark"] .card-wkt-docs canvas {
   display: block;
 }
 
-:root[data-theme="dark"] wkt-docs-card[data-mode="input"] .docs-note {
+:root[data-theme="dark"] .card-wkt-docs .docs-clear {
   display: block;
 }

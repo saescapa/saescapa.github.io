@@ -5,109 +5,44 @@ const FADE_MS = 1600;
 const RISE_PX = 16;
 const MARGIN_PX = 8;
 const FILING_MESSAGES = ['submitted to plan', 'created idea', 'filed a bug', 'wrote a handoff', 'archived plan'];
-const GREETING_REPLIES = new Map([
-  ['hi', 'hello!'],
-  ['hey', 'hello!'],
-  ['hello', 'hi!'],
-]);
-const RECOGNIZER_CONSTRAINTS = { languages: ['en'] };
 
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-
-let recognizerPromise = null;
-let recognitionUnsupported = !('queryHandwritingRecognizer' in navigator);
-
-async function createRecognizer() {
-  try {
-    if (!(await navigator.queryHandwritingRecognizer(RECOGNIZER_CONSTRAINTS))) return null;
-    return await navigator.createHandwritingRecognizer(RECOGNIZER_CONSTRAINTS);
-  } catch {
-    return null;
-  }
-}
-
-async function getRecognizer() {
-  if (recognitionUnsupported) return null;
-  recognizerPromise ??= createRecognizer();
-  const recognizer = await recognizerPromise;
-  if (!recognizer) recognitionUnsupported = true;
-  return recognizer;
-}
-
-async function recognize(strokes) {
-  const recognizer = await getRecognizer();
-  if (!recognizer) return null;
-  try {
-    const drawing = recognizer.startDrawing();
-    try {
-      for (const points of strokes) {
-        const stroke = new HandwritingStroke();
-        points.forEach((point) => stroke.addPoint(point));
-        drawing.addStroke(stroke);
-      }
-      const predictions = await drawing.getPrediction();
-      return predictions[0]?.text ?? '';
-    } finally {
-      drawing.clear();
-    }
-  } catch {
-    recognitionUnsupported = true;
-    return null;
-  }
-}
-
-function normalize(text) {
-  return text.toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, '').trim();
-}
 
 class WKTDocsCard extends HTMLElement {
   connectedCallback() {
     this.strokes = [];
     this.current = null;
-    this.origin = 0;
+    this.pointerID = null;
     this.settleTimer = 0;
-    this.generation = 0;
-    this.fade = null;
     this.messageIndex = 0;
     this.build();
-    this.setMode('input');
-    getRecognizer().then((recognizer) => {
-      if (recognizer) this.setMode('canvas');
-    });
   }
 
   disconnectedCallback() {
     clearTimeout(this.settleTimer);
     this.resizeObserver.disconnect();
     this.canvas.remove();
-    this.form.remove();
-  }
-
-  setMode(mode) {
-    this.dataset.mode = mode;
+    this.clearButton.remove();
   }
 
   build() {
     this.card = this.querySelector('.card');
     this.canvas = document.createElement('canvas');
     this.canvas.setAttribute('aria-hidden', 'true');
-    this.card.append(this.canvas);
+    this.clearButton = document.createElement('button');
+    this.clearButton.type = 'button';
+    this.clearButton.className = 'docs-clear';
+    this.clearButton.setAttribute('aria-label', 'Clear drawing');
+    this.clearButton.textContent = 'clear';
+    this.card.append(this.canvas, this.clearButton);
+
     this.resizeObserver = new ResizeObserver(() => this.resize());
     this.resizeObserver.observe(this.canvas);
     this.canvas.addEventListener('pointerdown', (event) => this.begin(event));
     this.canvas.addEventListener('pointermove', (event) => this.extend(event));
     this.canvas.addEventListener('pointerup', (event) => this.end(event));
     this.canvas.addEventListener('pointercancel', (event) => this.end(event));
-
-    this.form = document.createElement('form');
-    this.form.className = 'docs-note';
-    this.form.innerHTML = '<label><span class="docs-sr">Note</span><input type="text" autocomplete="off" maxlength="40" placeholder="jot a note\u2026"></label>';
-    this.input = this.form.querySelector('input');
-    this.card.querySelector('.card-title').after(this.form);
-    this.form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      this.submitNote();
-    });
+    this.clearButton.addEventListener('click', () => this.clear());
   }
 
   resize() {
@@ -151,18 +86,21 @@ class WKTDocsCard extends HTMLElement {
     ctx.fill();
   }
 
+  clear() {
+    clearTimeout(this.settleTimer);
+    this.strokes = [];
+    this.current = null;
+    this.redraw();
+  }
+
   point(event) {
     const rect = this.canvas.getBoundingClientRect();
-    const t = Math.round(event.timeStamp - this.origin);
-    return { x: event.clientX - rect.left, y: event.clientY - rect.top, t };
+    return { x: event.clientX - rect.left, y: event.clientY - rect.top };
   }
 
   begin(event) {
     if (this.current || (event.pointerType === 'mouse' && event.button !== 0)) return;
-    this.generation++;
     clearTimeout(this.settleTimer);
-    if (this.fade) this.finishFade();
-    if (!this.strokes.length) this.origin = event.timeStamp;
     this.canvas.setPointerCapture(event.pointerId);
     this.pointerID = event.pointerId;
     this.current = [this.point(event)];
@@ -185,53 +123,21 @@ class WKTDocsCard extends HTMLElement {
   end(event) {
     if (!this.current || event.pointerId !== this.pointerID) return;
     this.current = null;
-    this.settleTimer = setTimeout(() => this.respond(), SETTLE_MS);
+    this.settleTimer = setTimeout(() => this.showReply(this.nextMessage()), SETTLE_MS);
   }
 
-  async respond() {
-    const generation = this.generation;
-    const strokes = this.strokes.map((points) => points.map((point) => ({ ...point })));
-    const text = await recognize(strokes);
-    if (generation !== this.generation) return;
-    if (text === null) this.setMode('input');
-    const bounds = this.strokeBounds();
-    this.showReply(this.replyFor(text ?? ''), (bounds.minX + bounds.maxX) / 2);
-    this.fadeOut(this.canvas, () => {
-      this.strokes = [];
-      this.redraw();
-    });
-  }
-
-  submitNote() {
-    const text = this.input.value;
-    if (!normalize(text)) return;
-    const card = this.card.getBoundingClientRect();
-    const field = this.input.getBoundingClientRect();
-    const ghost = document.createElement('span');
-    ghost.className = 'docs-ghost';
-    ghost.textContent = text;
-    ghost.style.left = `${field.left - card.left - this.card.clientLeft}px`;
-    ghost.style.top = `${field.top - card.top - this.card.clientTop}px`;
-    this.card.append(ghost);
-    this.input.value = '';
-    this.showReply(this.replyFor(text), (field.left + field.right) / 2 - card.left);
-    ghost.animate([{ opacity: 1 }, { opacity: 0 }], { duration: FADE_MS, easing: 'ease-out' }).finished.then(
-      () => ghost.remove(),
-      () => ghost.remove(),
-    );
-  }
-
-  replyFor(text) {
-    return GREETING_REPLIES.get(normalize(text)) ?? this.nextFilingMessage();
-  }
-
-  nextFilingMessage() {
+  nextMessage() {
     const message = FILING_MESSAGES[this.messageIndex];
     this.messageIndex = (this.messageIndex + 1) % FILING_MESSAGES.length;
     return message;
   }
 
-  showReply(text, anchorX) {
+  anchorX() {
+    const xs = this.strokes.flat().map(({ x }) => x);
+    return (Math.min(...xs) + Math.max(...xs)) / 2;
+  }
+
+  showReply(text) {
     const message = document.createElement('span');
     message.className = 'docs-message';
     message.textContent = text;
@@ -244,11 +150,10 @@ class WKTDocsCard extends HTMLElement {
     const bandBottom = description.top - card.top - this.card.clientTop - MARGIN_PX / 2;
     const top = bandBottom - message.offsetHeight;
     const half = message.offsetWidth / 2;
-    message.style.left = `${Math.max(half + MARGIN_PX, Math.min(anchorX, this.card.clientWidth - half - MARGIN_PX))}px`;
+    message.style.left = `${Math.max(half + MARGIN_PX, Math.min(this.anchorX(), this.card.clientWidth - half - MARGIN_PX))}px`;
     message.style.top = `${top}px`;
 
     const rise = reducedMotion.matches ? 0 : Math.max(0, Math.min(RISE_PX, top - bandTop));
-    const options = { duration: FADE_MS, easing: 'ease-out' };
     message
       .animate(
         [
@@ -256,33 +161,9 @@ class WKTDocsCard extends HTMLElement {
           { opacity: 1, transform: 'translateY(0)', offset: 0.25 },
           { opacity: 0, transform: `translateY(${-rise}px)` },
         ],
-        options,
+        { duration: FADE_MS, easing: 'ease-out' },
       )
       .finished.then(() => message.remove(), () => message.remove());
-  }
-
-  fadeOut(element, onDone) {
-    const animation = element.animate([{ opacity: 1 }, { opacity: 0 }], { duration: FADE_MS, easing: 'ease-out', fill: 'forwards' });
-    this.fade = { animation, onDone };
-    animation.finished.then(() => this.finishFade(), () => {});
-  }
-
-  finishFade() {
-    if (!this.fade) return;
-    const { animation, onDone } = this.fade;
-    this.fade = null;
-    onDone();
-    animation.cancel();
-  }
-
-  strokeBounds() {
-    const points = this.strokes.flat();
-    return {
-      minX: Math.min(...points.map(({ x }) => x)),
-      maxX: Math.max(...points.map(({ x }) => x)),
-      minY: Math.min(...points.map(({ y }) => y)),
-      maxY: Math.max(...points.map(({ y }) => y)),
-    };
   }
 }
 

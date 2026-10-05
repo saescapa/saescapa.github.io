@@ -1,13 +1,16 @@
-export const dmx = new Uint8Array(4);
+export const FIXTURE_COUNT = 8;
+export const CHANNELS_PER_FIXTURE = 4;
+export const dmx = new Uint8Array(FIXTURE_COUNT * CHANNELS_PER_FIXTURE);
 
 const subscribers = new Set();
 
-export function setDMX(values) {
-  const count = Math.min(values.length, dmx.length);
-  for (let channel = 0; channel < count; channel++) {
-    dmx[channel] = Math.max(0, Math.min(255, Math.round(values[channel])));
-  }
+export function commit() {
   subscribers.forEach((callback) => callback(dmx));
+}
+
+export function clearDMX() {
+  dmx.fill(0);
+  commit();
 }
 
 export function subscribe(callback) {

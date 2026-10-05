@@ -33,6 +33,12 @@
   cursor: default;
 }
 
+:root[data-theme="dark"] .card-catx .card-meta,
+:root[data-theme="dark"] .card-catx .card-title,
+:root[data-theme="dark"] .card-catx .card-line {
+  opacity: 0.55;
+}
+
 :root[data-theme="dark"] .card-catx:hover {
   transform: none;
 }

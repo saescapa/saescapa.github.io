@@ -1,7 +1,6 @@
-import { dmx, subscribe } from '../dmx.js';
+import { CHANNELS_PER_FIXTURE, FIXTURE_COUNT, dmx, subscribe } from '../dmx.js';
 
-const RING_SPACING = 15;
-const FIXTURE_RING = 5;
+const RING_SPACING = 20;
 const MAX_GLOW = 18;
 
 class CatxCard extends HTMLElement {
@@ -50,12 +49,11 @@ class CatxCard extends HTMLElement {
 
     const cx = width * 0.85;
     const cy = height * 0.15;
-    const reach = Math.hypot(Math.max(cx, width - cx), Math.max(cy, height - cy));
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.09)';
     ctx.lineWidth = 1;
-    for (let ring = 1; ring * RING_SPACING <= reach + RING_SPACING; ring++) {
+    for (let fixture = 0; fixture < FIXTURE_COUNT; fixture++) {
       ctx.beginPath();
-      ctx.arc(cx, cy, ring * RING_SPACING - 0.5, 0, Math.PI * 2);
+      ctx.arc(cx, cy, this.radius(fixture), 0, Math.PI * 2);
       ctx.stroke();
     }
 
@@ -69,20 +67,26 @@ class CatxCard extends HTMLElement {
     ctx.fillRect(-2, -2, 4, 4);
     ctx.restore();
 
-    const [dimmer, red, green, blue] = dmx;
-    if (!dimmer) return;
-    const level = dimmer / 255;
-    const color = `rgb(${Math.round(red * level)}, ${Math.round(green * level)}, ${Math.round(blue * level)})`;
     ctx.globalCompositeOperation = 'lighter';
-    ctx.strokeStyle = color;
-    ctx.shadowColor = color;
-    ctx.shadowBlur = MAX_GLOW * level;
     ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(cx, cy, FIXTURE_RING * RING_SPACING - 0.5, 0, Math.PI * 2);
-    ctx.stroke();
+    for (let fixture = 0; fixture < FIXTURE_COUNT; fixture++) {
+      const offset = fixture * CHANNELS_PER_FIXTURE;
+      const level = dmx[offset] / 255;
+      if (!level) continue;
+      const color = `rgb(${Math.round(dmx[offset + 1] * level)}, ${Math.round(dmx[offset + 2] * level)}, ${Math.round(dmx[offset + 3] * level)})`;
+      ctx.strokeStyle = color;
+      ctx.shadowColor = color;
+      ctx.shadowBlur = MAX_GLOW * level;
+      ctx.beginPath();
+      ctx.arc(cx, cy, this.radius(fixture), 0, Math.PI * 2);
+      ctx.stroke();
+    }
     ctx.globalCompositeOperation = 'source-over';
     ctx.shadowBlur = 0;
+  }
+
+  radius(fixture) {
+    return (fixture + 1) * RING_SPACING - 0.5;
   }
 }
 
