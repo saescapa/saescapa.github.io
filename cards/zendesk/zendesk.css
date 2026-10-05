@@ -1,3 +1,7 @@
+zendesk-card {
+  view-transition-name: card-zendesk;
+}
+
 .card-zendesk {
   color: #f3f0ea;
   background: #03363d;

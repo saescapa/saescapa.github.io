@@ -1,3 +1,7 @@
+consulting-card {
+  view-transition-name: card-consulting;
+}
+
 .card-consulting {
   container-type: inline-size;
   --card-bg: linear-gradient(#a8c2db, #d2dfeb 72%);
@@ -46,6 +50,7 @@
   --night: 1;
 }
 
+.card-consulting .card-meta,
 .card-consulting .card-title,
 .card-consulting .card-line {
   position: relative;

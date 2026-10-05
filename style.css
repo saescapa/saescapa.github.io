@@ -80,9 +80,38 @@ a {
   transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
 }
 
+header {
+  view-transition-name: page-header;
+}
+
+section:nth-of-type(1) h2 {
+  view-transition-name: heading-1;
+}
+
+section:nth-of-type(2) h2 {
+  view-transition-name: heading-2;
+}
+
+section:nth-of-type(3) h2 {
+  view-transition-name: heading-3;
+}
+
+.past {
+  view-transition-name: page-past;
+}
+
+footer {
+  view-transition-name: page-footer;
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
+  animation-duration: 0.2s;
+}
+
+::view-transition-group(*) {
   animation-duration: 0.35s;
+  animation-timing-function: ease;
 }
 
 header h1 {

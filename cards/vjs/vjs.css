@@ -1,3 +1,7 @@
+vjs-card {
+  view-transition-name: card-vjs;
+}
+
 .card-vjs {
   --px: 3px;
   --step: polygon(0 var(--px), var(--px) var(--px), var(--px) 0, calc(100% - var(--px)) 0, calc(100% - var(--px)) var(--px), 100% var(--px), 100% calc(100% - var(--px)), calc(100% - var(--px)) calc(100% - var(--px)), calc(100% - var(--px)) 100%, var(--px) 100%, var(--px) calc(100% - var(--px)), 0 calc(100% - var(--px)));
@@ -103,15 +107,15 @@
   color: #7af0e8;
 }
 
-:root[data-theme="dark"] .card-vjs .card-line {
+:root[data-theme="dark"] vjs-card:defined .card-line {
   display: none;
 }
 
-:root[data-theme="dark"] .vjs-panel {
+:root[data-theme="dark"] vjs-card:defined .vjs-panel {
   display: flex;
 }
 
-:root[data-theme="dark"] .card-vjs:hover {
+:root[data-theme="dark"] vjs-card:defined .card-vjs:hover {
   transform: none;
 }
 

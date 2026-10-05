@@ -1,3 +1,7 @@
+catx-card {
+  view-transition-name: card-catx;
+}
+
 .card-catx {
   color: #e6e6e6;
   font-family: ui-monospace, 'SF Mono', Menlo, monospace;
@@ -28,18 +32,21 @@
 }
 
 :root[data-theme="dark"] .card-catx {
-  background: #050505;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+:root[data-theme="dark"] catx-card:defined .card-catx {
+  background: #050505;
   cursor: default;
 }
 
-:root[data-theme="dark"] .card-catx .card-meta,
-:root[data-theme="dark"] .card-catx .card-title,
-:root[data-theme="dark"] .card-catx .card-line {
+:root[data-theme="dark"] catx-card:defined .card-meta,
+:root[data-theme="dark"] catx-card:defined .card-title,
+:root[data-theme="dark"] catx-card:defined .card-line {
   opacity: 0.55;
 }
 
-:root[data-theme="dark"] .card-catx:hover {
+:root[data-theme="dark"] catx-card:defined .card-catx:hover {
   transform: none;
 }
 

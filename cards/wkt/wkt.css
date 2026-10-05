@@ -1,3 +1,7 @@
+wkt-card {
+  view-transition-name: card-wkt;
+}
+
 .card-wkt {
   color: #1f2a1c;
   background: #e4ecdf;
@@ -17,20 +21,23 @@
   color: #cfe8c8;
   background: #141a14;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-  overflow: visible;
 }
 
-:root[data-theme="dark"] wkt-card {
+:root[data-theme="dark"] wkt-card:defined {
   z-index: 2;
 }
 
+:root[data-theme="dark"] wkt-card:defined .card-wkt {
+  overflow: visible;
+}
+
 @media (min-width: 460px) {
-  :root[data-theme="dark"] wkt-card {
+  :root[data-theme="dark"] wkt-card:defined {
     grid-column: span 2;
   }
 }
 
-:root[data-theme="dark"] .card-wkt:hover {
+:root[data-theme="dark"] wkt-card:defined .card-wkt:hover {
   transform: none;
 }
 
@@ -38,7 +45,7 @@
   color: #5fbf57;
 }
 
-:root[data-theme="dark"] .card-wkt .card-title {
+:root[data-theme="dark"] wkt-card:defined .card-title {
   font-size: 0.85rem;
 }
 

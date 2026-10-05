@@ -1,19 +1,26 @@
-export const FIXTURE_COUNT = 8;
-export const CHANNELS_PER_FIXTURE = 4;
-export const dmx = new Uint8Array(FIXTURE_COUNT * CHANNELS_PER_FIXTURE);
+(() => {
+  'use strict';
 
-const subscribers = new Set();
+  const FIXTURE_COUNT = 8;
+  const CHANNELS_PER_FIXTURE = 4;
+  const dmx = new Uint8Array(FIXTURE_COUNT * CHANNELS_PER_FIXTURE);
 
-export function commit() {
-  subscribers.forEach((callback) => callback(dmx));
-}
+  const subscribers = new Set();
 
-export function clearDMX() {
-  dmx.fill(0);
-  commit();
-}
+  function commit() {
+    subscribers.forEach((callback) => callback(dmx));
+  }
 
-export function subscribe(callback) {
-  subscribers.add(callback);
-  return () => subscribers.delete(callback);
-}
+  function clearDMX() {
+    dmx.fill(0);
+    commit();
+  }
+
+  function subscribe(callback) {
+    subscribers.add(callback);
+    return () => subscribers.delete(callback);
+  }
+
+  window.site = window.site || {};
+  window.site.dmx = { dmx, FIXTURE_COUNT, CHANNELS_PER_FIXTURE, commit, clearDMX, subscribe };
+})();

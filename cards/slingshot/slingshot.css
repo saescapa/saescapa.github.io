@@ -1,3 +1,7 @@
+slingshot-card {
+  view-transition-name: card-slingshot;
+}
+
 .card-slingshot {
   color: #e2e2e2;
   background:
