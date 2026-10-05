@@ -295,6 +295,11 @@ footer {
     gap: 1rem;
   }
 
+  .cards,
+  .cards-small {
+    grid-template-columns: 1fr;
+  }
+
   .card,
   .cards-small .card {
     min-height: auto;

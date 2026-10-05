@@ -31,7 +31,7 @@ wkt-card {
   overflow: visible;
 }
 
-@media (min-width: 460px) {
+@media (min-width: 601px) {
   :root[data-theme="dark"] wkt-card:defined {
     grid-column: span 2;
   }
