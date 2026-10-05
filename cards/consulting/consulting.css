@@ -1,4 +1,5 @@
 .card-consulting {
+  container-type: inline-size;
   --card-bg: linear-gradient(#a8c2db, #d2dfeb 72%);
   --card-border: rgba(29, 42, 58, 0.35);
   --ink: #1d2a3a;
@@ -15,7 +16,6 @@
   --tower-b: #dedad0;
   --iron: #222222;
   --night: 0;
-  container-type: inline-size;
   color: var(--ink);
   cursor: default;
   background: var(--card-bg);
@@ -46,19 +46,17 @@
   --night: 1;
 }
 
-.cards-small .card-consulting {
-  min-height: 90px;
-  padding-bottom: 3.5rem;
-}
-
 .card-consulting .card-title,
 .card-consulting .card-line {
   position: relative;
 }
 
+.card-consulting .card-title {
+  font-weight: 400;
+}
+
 .card-consulting .card-line {
   max-width: calc(100% - 4.5rem);
-  font-size: 0.7rem;
   color: var(--ink-soft);
 }
 
@@ -68,7 +66,7 @@
   bottom: 0;
   width: 260px;
   height: 170px;
-  transform: scale(0.96);
+  transform: scale(0.6);
   transform-origin: 100% 100%;
   pointer-events: none;
 }
@@ -80,8 +78,8 @@
 .lh-sea {
   right: 0;
   bottom: 0;
-  width: 800px;
-  height: 28px;
+  width: 1200px;
+  height: 24px;
   background: linear-gradient(var(--sea-top) 0 1.5px, var(--sea) 1.5px);
 }
 
@@ -154,21 +152,6 @@
   clip-path: polygon(0 100%, 50% 0, 100% 100%);
 }
 
-.lh-cloud {
-  right: -20px;
-  top: 30px;
-  width: 80px;
-  height: 11px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.55);
-  animation: lh-drift 40s linear infinite;
-  will-change: transform;
-}
-
-:root[data-theme="dark"] .lh-cloud {
-  opacity: 0;
-}
-
 .lh-stars,
 .lh-beam,
 .lh-lamp,
@@ -179,21 +162,33 @@
 
 .lh-stars {
   right: 0;
-  top: 0;
-  width: 400px;
-  height: 170px;
+  bottom: 0;
+  width: 600px;
+  height: 300px;
   background-image:
-    radial-gradient(0.7px 0.7px at 170px 25px, #ffffff 50%, transparent 55%),
-    radial-gradient(0.6px 0.6px at 230px 14px, #ffffff 50%, transparent 55%),
-    radial-gradient(0.8px 0.8px at 290px 35px, #ffffff 50%, transparent 55%),
-    radial-gradient(0.6px 0.6px at 265px 70px, #cfd8ea 50%, transparent 55%),
-    radial-gradient(0.6px 0.6px at 200px 55px, #cfd8ea 50%, transparent 55%),
-    radial-gradient(0.75px 0.75px at 325px 15px, #ffffff 50%, transparent 55%),
-    radial-gradient(0.6px 0.6px at 385px 75px, #cfd8ea 50%, transparent 55%),
-    radial-gradient(0.6px 0.6px at 15px 50px, #cfd8ea 50%, transparent 55%),
-    radial-gradient(0.7px 0.7px at 60px 20px, #ffffff 50%, transparent 55%),
-    radial-gradient(0.6px 0.6px at 100px 80px, #cfd8ea 50%, transparent 55%),
-    radial-gradient(0.8px 0.8px at 125px 35px, #ffffff 50%, transparent 55%);
+    radial-gradient(0.9px 0.9px at 341px 250px, #ffffff 50%, transparent 55%),
+    radial-gradient(1.3px 1.3px at 59px 26px, #ffffff 50%, transparent 55%),
+    radial-gradient(0.9px 0.9px at 384px 157px, #cfd8ea 50%, transparent 55%),
+    radial-gradient(0.9px 0.9px at 229px 17px, #ffffff 50%, transparent 55%),
+    radial-gradient(0.9px 0.9px at 438px 25px, #ffffff 50%, transparent 55%),
+    radial-gradient(0.9px 0.9px at 574px 116px, #cfd8ea 50%, transparent 55%),
+    radial-gradient(0.9px 0.9px at 136px 250px, #cfd8ea 50%, transparent 55%),
+    radial-gradient(1.3px 1.3px at 73px 155px, #ffffff 50%, transparent 55%),
+    radial-gradient(0.9px 0.9px at 60px 64px, #cfd8ea 50%, transparent 55%),
+    radial-gradient(1.1px 1.1px at 146px 82px, #ffffff 50%, transparent 55%),
+    radial-gradient(1.3px 1.3px at 563px 38px, #ffffff 50%, transparent 55%),
+    radial-gradient(1.3px 1.3px at 195px 34px, #cfd8ea 50%, transparent 55%),
+    radial-gradient(0.9px 0.9px at 202px 103px, #cfd8ea 50%, transparent 55%),
+    radial-gradient(0.9px 0.9px at 74px 152px, #cfd8ea 50%, transparent 55%),
+    radial-gradient(1.3px 1.3px at 220px 135px, #cfd8ea 50%, transparent 55%),
+    radial-gradient(1.1px 1.1px at 447px 206px, #ffffff 50%, transparent 55%),
+    radial-gradient(1.1px 1.1px at 474px 100px, #ffffff 50%, transparent 55%),
+    radial-gradient(0.9px 0.9px at 194px 186px, #ffffff 50%, transparent 55%),
+    radial-gradient(1.1px 1.1px at 317px 142px, #ffffff 50%, transparent 55%),
+    radial-gradient(1.3px 1.3px at 469px 81px, #ffffff 50%, transparent 55%),
+    radial-gradient(1.1px 1.1px at 130px 139px, #ffffff 50%, transparent 55%),
+    radial-gradient(1.1px 1.1px at 360px 46px, #ffffff 50%, transparent 55%),
+    radial-gradient(0.9px 0.9px at 50px 179px, #cfd8ea 50%, transparent 55%);
 }
 
 .lh-beam {
@@ -233,11 +228,6 @@
   box-shadow: 0 0 3px 1px rgba(255, 215, 122, 0.5);
 }
 
-@keyframes lh-drift {
-  from { transform: translateX(0); }
-  to { transform: translateX(-70px); }
-}
-
 @keyframes lh-sweep {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -251,25 +241,23 @@
 
 @container (max-width: 200px) {
   .lh-scene {
-    transform: scale(0.72);
+    transform: scale(0.4);
   }
 
   .card-consulting .card-line {
     max-width: calc(100% - 3rem);
-    font-size: 0.65rem;
   }
 }
 
 @media (max-width: 600px) {
   .cards-small .card-consulting {
-    min-height: 90px;
+    min-height: 70px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   :root[data-theme="dark"] .lh-beam,
-  :root[data-theme="dark"] .lh-lamp,
-  .lh-cloud {
+  :root[data-theme="dark"] .lh-lamp {
     animation: none;
   }
 }
