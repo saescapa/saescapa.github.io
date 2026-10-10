@@ -4,6 +4,7 @@
   const INK = '#9fb8e6';
   const INK_WIDTH = 2;
   const SETTLE_MS = 900;
+  const INK_FADE_MS = 450;
   const FADE_MS = 1600;
   const RISE_PX = 16;
   const MARGIN_PX = 8;
@@ -17,12 +18,14 @@
       this.current = null;
       this.pointerID = null;
       this.settleTimer = 0;
+      this.inkFade = null;
       this.messageIndex = 0;
       this.build();
     }
 
     disconnectedCallback() {
       clearTimeout(this.settleTimer);
+      this.inkFade?.cancel();
       this.resizeObserver.disconnect();
       this.canvas.remove();
       this.clearButton.remove();
@@ -91,6 +94,8 @@
 
     clear() {
       clearTimeout(this.settleTimer);
+      this.inkFade?.cancel();
+      this.inkFade = null;
       this.strokes = [];
       this.current = null;
       this.redraw();
@@ -104,6 +109,8 @@
     begin(event) {
       if (this.current || (event.pointerType === 'mouse' && event.button !== 0)) return;
       clearTimeout(this.settleTimer);
+      this.inkFade?.cancel();
+      this.inkFade = null;
       this.canvas.setPointerCapture(event.pointerId);
       this.pointerID = event.pointerId;
       this.current = [this.point(event)];
@@ -126,7 +133,21 @@
     end(event) {
       if (!this.current || event.pointerId !== this.pointerID) return;
       this.current = null;
-      this.settleTimer = setTimeout(() => this.showReply(this.nextMessage()), SETTLE_MS);
+      this.settleTimer = setTimeout(() => this.release(), SETTLE_MS);
+    }
+
+    release() {
+      const anchor = this.anchorX();
+      const reply = () => {
+        this.clear();
+        this.showReply(this.nextMessage(), anchor);
+      };
+      if (reducedMotion.matches) {
+        reply();
+        return;
+      }
+      this.inkFade = this.canvas.animate([{ opacity: 1 }, { opacity: 0 }], { duration: INK_FADE_MS, easing: 'ease-out', fill: 'forwards' });
+      this.inkFade.finished.then(reply, () => {});
     }
 
     nextMessage() {
@@ -140,7 +161,7 @@
       return (Math.min(...xs) + Math.max(...xs)) / 2;
     }
 
-    showReply(text) {
+    showReply(text, anchor) {
       const message = document.createElement('span');
       message.className = 'docs-message';
       message.textContent = text;
@@ -153,7 +174,7 @@
       const bandBottom = description.top - card.top - this.card.clientTop - MARGIN_PX / 2;
       const top = bandBottom - message.offsetHeight;
       const half = message.offsetWidth / 2;
-      message.style.left = `${Math.max(half + MARGIN_PX, Math.min(this.anchorX(), this.card.clientWidth - half - MARGIN_PX))}px`;
+      message.style.left = `${Math.max(half + MARGIN_PX, Math.min(anchor, this.card.clientWidth - half - MARGIN_PX))}px`;
       message.style.top = `${top}px`;
 
       const rise = reducedMotion.matches ? 0 : Math.max(0, Math.min(RISE_PX, top - bandTop));
