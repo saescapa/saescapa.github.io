@@ -311,6 +311,16 @@ footer {
   .card-line {
     margin-top: 1rem;
   }
+
+  :root:not([data-theme="dark"]) .cards-small .card {
+    box-sizing: border-box;
+    min-height: 9.5rem;
+  }
+
+  :root:not([data-theme="dark"]) .cards-small .card-line {
+    margin-top: auto;
+    margin-bottom: 0.5rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
