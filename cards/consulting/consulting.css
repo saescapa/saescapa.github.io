@@ -31,6 +31,10 @@ consulting-card {
   transform: none;
 }
 
+.cards-small .card-consulting {
+  padding: calc(1rem - 1px);
+}
+
 :root[data-theme="dark"] .card-consulting {
   --card-bg: linear-gradient(#0b1424, #142238 72%);
   --card-border: rgba(201, 206, 219, 0.28);
@@ -66,12 +70,14 @@ consulting-card {
 }
 
 .lh-scene {
+  --lh-scale: 0.6;
+  --lh-reach: calc((100cqw + 12rem) / var(--lh-scale));
   position: absolute;
   right: 0;
   bottom: 0;
   width: 260px;
   height: 170px;
-  transform: scale(0.6);
+  transform: scale(var(--lh-scale));
   transform-origin: 100% 100%;
   pointer-events: none;
 }
@@ -168,8 +174,10 @@ consulting-card {
 .lh-stars {
   right: 0;
   bottom: 0;
-  width: 600px;
-  height: 300px;
+  width: var(--lh-reach);
+  height: 600px;
+  background-size: 600px 300px;
+  background-position: right bottom;
   background-image:
     radial-gradient(0.9px 0.9px at 341px 250px, #ffffff 50%, transparent 55%),
     radial-gradient(1.3px 1.3px at 59px 26px, #ffffff 50%, transparent 55%),
@@ -197,10 +205,10 @@ consulting-card {
 }
 
 .lh-beam {
-  right: -516px;
-  top: -513px;
-  width: 1100px;
-  height: 1100px;
+  right: calc(34px - var(--lh-reach));
+  top: calc(37px - var(--lh-reach));
+  width: calc(var(--lh-reach) * 2);
+  height: calc(var(--lh-reach) * 2);
   border-radius: 50%;
   background: conic-gradient(from 0deg, transparent 0deg, rgba(255, 236, 170, 0.26) 12deg, rgba(255, 236, 170, 0.06) 24deg, transparent 32deg);
   will-change: transform;
@@ -246,7 +254,7 @@ consulting-card {
 
 @container (max-width: 200px) {
   .lh-scene {
-    transform: scale(0.4);
+    --lh-scale: 0.4;
   }
 
   .card-consulting .card-line {
