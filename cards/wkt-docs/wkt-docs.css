@@ -10,10 +10,6 @@ wkt-docs-card {
     #fbf8ef;
 }
 
-.cards-small .card-wkt-docs {
-  padding-left: 1.75rem;
-}
-
 .card-wkt-docs .card-title {
   font-family: Georgia, 'Times New Roman', serif;
   font-style: italic;

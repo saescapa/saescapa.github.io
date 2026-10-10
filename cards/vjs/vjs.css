@@ -72,7 +72,7 @@ vjs-card {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.25rem;
   padding: 10px;
   background: #2e4a57;
   color: #f4f8f5;
@@ -94,14 +94,11 @@ vjs-card {
   color: #7af0e8;
 }
 
-.card-vjs .card-line {
-  margin-top: auto;
-}
-
 .vjs-panel {
   display: none;
   flex-direction: column;
   gap: 0.5rem;
+  margin-top: 0.25rem;
   font-family: 'Press Start 2P', ui-monospace, monospace;
   font-size: 8px;
   line-height: 1.4;

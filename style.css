@@ -172,8 +172,9 @@ h2 {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  --card-pad: 1.25rem;
   min-height: 170px;
-  padding: 1.25rem;
+  padding: var(--card-pad);
   border-radius: 14px;
   text-decoration: none;
   transition: transform 0.2s ease;
@@ -209,8 +210,8 @@ h2 {
 }
 
 .cards-small .card {
+  --card-pad: 1rem;
   min-height: 130px;
-  padding: 1rem;
 }
 
 .cards-small .card-title {
@@ -224,6 +225,7 @@ h2 {
 
 .card-pending {
   cursor: default;
+  padding: calc(var(--card-pad) - 1.5px);
   border: 1.5px dashed rgba(0, 0, 0, 0.35);
 }
 
@@ -302,6 +304,7 @@ footer {
 
   .card,
   .cards-small .card {
+    --card-pad: 1rem;
     min-height: auto;
   }
 

@@ -23,16 +23,13 @@ consulting-card {
   color: var(--ink);
   cursor: default;
   background: var(--card-bg);
+  padding: calc(var(--card-pad) - 1px);
   border: 1px dashed var(--card-border);
   font-family: ui-monospace, 'SF Mono', Menlo, monospace;
 }
 
 .card-consulting:hover {
   transform: none;
-}
-
-.cards-small .card-consulting {
-  padding: calc(1rem - 1px);
 }
 
 :root[data-theme="dark"] .card-consulting {
