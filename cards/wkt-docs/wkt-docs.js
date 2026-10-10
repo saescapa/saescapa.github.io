@@ -5,6 +5,7 @@
   const INK_WIDTH = 2;
   const SETTLE_MS = 900;
   const INK_FADE_MS = 450;
+  const REPLY_LEAD_MS = 250;
   const FADE_MS = 1600;
   const RISE_PX = 16;
   const MARGIN_PX = 8;
@@ -138,16 +139,15 @@
 
     release() {
       const anchor = this.anchorX();
-      const reply = () => {
-        this.clear();
-        this.showReply(this.nextMessage(), anchor);
-      };
+      const reply = () => this.showReply(this.nextMessage(), anchor);
       if (reducedMotion.matches) {
+        this.clear();
         reply();
         return;
       }
       this.inkFade = this.canvas.animate([{ opacity: 1 }, { opacity: 0 }], { duration: INK_FADE_MS, easing: 'ease-out', fill: 'forwards' });
-      this.inkFade.finished.then(reply, () => {});
+      this.inkFade.finished.then(() => this.clear(), () => {});
+      this.settleTimer = setTimeout(reply, INK_FADE_MS - REPLY_LEAD_MS);
     }
 
     nextMessage() {
