@@ -11,7 +11,7 @@
   const MAX_DIMMER = 255;
   const DEFAULT_DIMMER = 65;
   const PATTERN_STEPS = 8;
-  const STEPS_PER_BEAT = 2;
+  const STEPS_PER_BEAT = 1;
   const STROBE_WINDOW = 0.15;
   const WARM_WHITE = [255, 206, 150];
   const WHITE = [255, 255, 255];
@@ -104,6 +104,7 @@
       this.frame = 0;
       this.changed = false;
       this.readoutText = '';
+      this.readoutFixture = 1;
       this.beatFrame = { steps: 0, step: 0, phase: 0 };
       this.setFixture = (fixture, level, red, green, blue) => this.writeFixture(fixture, level, red, green, blue);
       this.build();
@@ -136,12 +137,15 @@
         </div>
         <label class="vjs-field">DIM <input type="range" min="0" max="${MAX_DIMMER}" step="1" value="${DEFAULT_DIMMER}"></label>
         <button type="button" class="vjs-fx"></button>
-        <output class="vjs-readout" aria-live="off"></output>`;
+        <div class="vjs-readout">
+          <output class="vjs-row" aria-live="off"></output>
+          <button type="button" class="vjs-row" aria-label="Show next fixture's channels"></button>
+        </div>`;
       this.bpmInput = this.panel.querySelector('input[type="number"]');
       this.dimInput = this.panel.querySelector('input[type="range"]');
       this.fxButton = this.panel.querySelector('.vjs-fx');
       [this.bpmDown, this.bpmUp] = this.panel.querySelectorAll('.vjs-step');
-      this.readout = this.panel.querySelector('output');
+      this.readoutRows = this.panel.querySelectorAll('.vjs-row');
       this.querySelector('.vjs-screen').append(this.panel);
 
       this.bpmInput.addEventListener('input', () => {
@@ -168,6 +172,10 @@
         this.effect = (this.effect + 1) % EFFECTS.length;
         this.renderEffect();
       });
+      this.readoutRows[1].addEventListener('click', () => {
+        this.readoutFixture = (this.readoutFixture % (FIXTURE_COUNT - 1)) + 1;
+        this.renderReadout();
+      });
       this.renderEffect();
       this.renderReadout();
       this.renderStepButtons();
@@ -189,16 +197,18 @@
     }
 
     renderReadout() {
-      const entries = [];
-      for (let channel = 0; channel < CHANNELS_PER_FIXTURE; channel++) {
-        entries.push(`CH${channel + 1} ${pad(dmx[channel])}`);
-      }
-      const text = entries.join(' ');
+      const rows = [0, this.readoutFixture].map((fixture) => {
+        const start = fixture * CHANNELS_PER_FIXTURE;
+        return [pad(start + 1), ...Array.from(dmx.subarray(start, start + CHANNELS_PER_FIXTURE), pad)];
+      });
+      const text = rows.flat().join(' ');
       if (text === this.readoutText) return;
       this.readoutText = text;
-      this.readout.replaceChildren(
-        ...entries.map((entry) => Object.assign(document.createElement('span'), { textContent: entry })),
-      );
+      rows.forEach((cells, index) => {
+        this.readoutRows[index].replaceChildren(
+          ...cells.map((cell) => Object.assign(document.createElement('span'), { textContent: cell })),
+        );
+      });
     }
 
     sync() {

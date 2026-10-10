@@ -1,4 +1,5 @@
 vjs-card {
+  --vjs-bezel: 8px;
   view-transition-name: card-vjs;
 }
 
@@ -7,10 +8,15 @@ vjs-card {
   --step: polygon(0 var(--px), var(--px) var(--px), var(--px) 0, calc(100% - var(--px)) 0, calc(100% - var(--px)) var(--px), 100% var(--px), 100% calc(100% - var(--px)), calc(100% - var(--px)) calc(100% - var(--px)), calc(100% - var(--px)) 100%, var(--px) 100%, var(--px) calc(100% - var(--px)), 0 calc(100% - var(--px)));
 }
 
+.cards-small vjs-card {
+  margin: calc(var(--vjs-bezel) * -1);
+}
+
 .cards-small .card-vjs {
   padding: 0;
   border: 0;
   border-radius: 0;
+  filter: drop-shadow(var(--px) var(--px) 0 rgba(0, 0, 0, 0.25));
 }
 
 .vjs-frame {
@@ -38,6 +44,7 @@ vjs-card {
 
 .vjs-bar {
   display: flex;
+  min-height: calc(var(--px) * 6);
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--px);
@@ -200,7 +207,32 @@ vjs-card {
 
 .vjs-readout {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(7.5em, 1fr));
-  gap: 4px 8px;
+  gap: 2px;
+  max-width: 28em;
   color: #f4f8f5;
+}
+
+.vjs-row {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  justify-content: space-between;
+  column-gap: 4px;
+  padding: 2px 0;
+}
+
+.vjs-row span:first-child {
+  color: #7af0e8;
+}
+
+.vjs-panel button.vjs-row {
+  width: 100%;
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  color: inherit;
+}
+
+.vjs-panel button.vjs-row:hover {
+  background: rgba(122, 240, 232, 0.15);
+  color: inherit;
 }
